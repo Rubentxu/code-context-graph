@@ -1,0 +1,88 @@
+{
+  "source_hash": "c6f4d13cfb04e9b2",
+  "ast_summary": {
+    "language": "Kotlin",
+    "root_type": "Program",
+    "total_nodes": 70,
+    "node_type_counts": {
+      "Other(\"user_type\")": 6,
+      "ClassDeclaration": 1,
+      "Other(\"primary_constructor\")": 1,
+      "Other(\"string_content\")": 1,
+      "Other(\"value_arguments\")": 1,
+      "Other(\"function_body\")": 4,
+      "Other(\"function_value_parameters\")": 4,
+      "Other(\"class\")": 1,
+      "BlockStatement": 2,
+      "Other(\"return_expression\")": 1,
+      "CallExpression": 1,
+      "Other(\"object\")": 1,
+      "Other(\"data\")": 1,
+      "Other(\"class_parameters\")": 1,
+      "Other(\"string_literal\")": 1,
+      "Other(\"function_modifier\")": 1,
+      "Other(\"var\")": 1,
+      "Other(\"parameter\")": 2,
+      "FunctionDeclaration": 4,
+      "Other(\"visibility_modifier\")": 1,
+      "Other(\"value_argument\")": 1,
+      "Identifier": 19,
+      "Other(\"class_body\")": 2,
+      "Other(\"companion_object\")": 1,
+      "Program": 1,
+      "Other(\"class_parameter\")": 1,
+      "Annotation": 3,
+      "Other(\"class_modifier\")": 1,
+      "Other(\"fun\")": 4,
+      "Other(\"assignment\")": 1
+    }
+  },
+  "entities": [
+    {
+      "name": "SimpleClass",
+      "entity_type": "Class",
+      "location_summary": "2:0-16:1",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "create",
+      "entity_type": "Method",
+      "location_summary": "14:8-14:64",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "fetchData",
+      "entity_type": "Method",
+      "location_summary": "9:4-11:5",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "getValue",
+      "entity_type": "Method",
+      "location_summary": "3:4-3:31",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "setValue",
+      "entity_type": "Method",
+      "location_summary": "5:4-7:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [],
+  "metrics": {
+    "total_lines": 16,
+    "classes_count": 1,
+    "functions_count": 4,
+    "complexity_score": 23.8,
+    "language_specific_keys": [
+      "data_classes_count",
+      "suspend_functions_count"
+    ]
+  }
+}

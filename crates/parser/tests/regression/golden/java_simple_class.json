@@ -1,0 +1,73 @@
+{
+  "source_hash": "5abcd2b87098eab0",
+  "ast_summary": {
+    "language": "Java",
+    "root_type": "Program",
+    "total_nodes": 53,
+    "node_type_counts": {
+      "Other(\"constructor_body\")": 1,
+      "Other(\"public\")": 4,
+      "Other(\"formal_parameter\")": 2,
+      "Other(\"expression_statement\")": 2,
+      "Other(\"assignment_expression\")": 2,
+      "MemberExpression": 2,
+      "Other(\"class\")": 1,
+      "Annotation": 5,
+      "Identifier": 12,
+      "Other(\"variable_declarator\")": 1,
+      "Other(\"integral_type\")": 4,
+      "Other(\"formal_parameters\")": 3,
+      "BlockStatement": 2,
+      "Other(\"void_type\")": 1,
+      "MethodDeclaration": 3,
+      "Other(\"field_declaration\")": 1,
+      "Other(\"private\")": 1,
+      "Other(\"class_body\")": 1,
+      "Other(\"this\")": 2,
+      "ReturnStatement": 1,
+      "Program": 1,
+      "ClassDeclaration": 1
+    }
+  },
+  "entities": [
+    {
+      "name": "SimpleClass",
+      "entity_type": "Class",
+      "location_summary": "2:0-16:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "SimpleClass",
+      "entity_type": "Method",
+      "location_summary": "5:4-7:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "getValue",
+      "entity_type": "Method",
+      "location_summary": "9:4-11:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "setValue",
+      "entity_type": "Method",
+      "location_summary": "13:4-15:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [],
+  "metrics": {
+    "total_lines": 16,
+    "classes_count": 1,
+    "functions_count": 0,
+    "complexity_score": 23.0,
+    "language_specific_keys": [
+      "annotations_count",
+      "interfaces_count"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+[engine]
+name = "code-context-graph"
+languages = ["python", "javascript", "java", "kotlin"]
+
+[parser]
+max_file_size_kb = 1024
+ignore_patterns = ["*_test.py", "*.min.js", "**/test/**", "**/tests/**"]
+
+[falkordb]
+url = "redis://localhost:6379"
+graph_name = "code_graph"
+
+[cas]
+enabled = true
+storage_path = "./cas_store"
+hash_algorithm = "blake3"
+compression = "zstd"
+dedup_threshold = 0.8
+
+[file_watcher]
+enabled = true
+debounce_ms = 100
+batch_threshold = 50
+ignore_patterns = [".git", "node_modules", "target", "__pycache__", ".idea", "*.log"]
+recursive = true
+
+[versioning]
+enabled = true
+max_versions = 1000
+auto_snapshot_interval = 3600
+merkle_tree_fanout = 16
+
+[connascence]
+enabled = true
+detect_static = true
+detect_dynamic = true
+strength_threshold = 0.7
+auto_suggest_refactoring = true
+
+[aase]
+enabled = true
+context_path = "./context"
+naming_convention = "strict"
+auto_propagate = true
+human_review_threshold = 0.8
+artifact_versioning = true
+context_chain_depth = 5
+
+[quality_metrics]
+calculate_cohesion = true
+calculate_coupling = true
+maintainability_threshold = 65
+complexity_warning = 10
+
+[api]
+port = 8080
+max_context_size = 8192
+enable_version_api = true
+enable_quality_api = true
+enable_aase_api = true
+
+[logging]
+level = "info"
+format = "json"

@@ -1,0 +1,31 @@
+[package]
+name = "code-context-graph-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[[bin]]
+name = "ccg"
+path = "src/main.rs"
+
+[dependencies]
+code-context-graph-core = { path = "../core" }
+code-context-graph-parser = { path = "../parser" }
+code-context-graph-graph = { path = "../graph" }
+code-context-graph-storage = { path = "../storage" }
+code-context-graph-watcher = { path = "../watcher" }
+code-context-graph-api = { path = "../api" }
+code-context-graph-connascence = { path = "../connascence" }
+code-context-graph-aase = { path = "../aase" }
+clap = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+toml = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+dirs = "5.0"

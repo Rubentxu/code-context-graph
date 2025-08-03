@@ -1,0 +1,95 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/core",
+    "crates/parser",
+    "crates/graph",
+    "crates/storage",
+    "crates/watcher",
+    "crates/api",
+    "crates/connascence",
+    "crates/aase",
+    "crates/cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Code Context Graph Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/rubentxu/code-context-graph"
+keywords = ["code-analysis", "ast", "graph", "llm", "refactoring"]
+categories = ["development-tools", "parsing"]
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+futures = "0.3"
+
+# Web framework
+axum = { version = "0.7", features = ["ws"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# CLI
+clap = { version = "4.0", features = ["derive", "env"] }
+
+# Hashing and crypto
+blake3 = "1.5"
+sha2 = "0.10"
+
+# Database and storage
+sled = "0.34"
+redis = { version = "0.24", features = ["tokio-comp"] }
+
+# File system
+notify = "6.1"
+walkdir = "2.4"
+
+# Tree-sitter
+tree-sitter = "0.23"
+tree-sitter-python = "0.23"
+tree-sitter-java = "0.23"
+tree-sitter-javascript = "0.23"
+tree-sitter-kotlin-ng = "1.1"
+
+# Utilities
+uuid = { version = "1.6", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+dashmap = "5.5"
+rayon = "1.8"
+
+# Template engine
+tera = "1.19"
+
+# Metrics
+prometheus = "0.13"
+
+# Testing
+proptest = "1.4"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.test]
+opt-level = 1

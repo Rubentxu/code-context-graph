@@ -1,0 +1,91 @@
+{
+  "source_hash": "70e79b974d5431a",
+  "ast_summary": {
+    "language": "Python",
+    "root_type": "Module",
+    "total_nodes": 59,
+    "node_type_counts": {
+      "Other(\"string_content\")": 1,
+      "BlockStatement": 5,
+      "Identifier": 22,
+      "Other(\"string_start\")": 1,
+      "Other(\"def\")": 4,
+      "VariableDeclaration": 2,
+      "Literal": 1,
+      "MemberExpression": 4,
+      "FunctionDeclaration": 4,
+      "Decorator": 1,
+      "Other(\"expression_statement\")": 2,
+      "Other(\"class\")": 1,
+      "Other(\"string_end\")": 1,
+      "Other(\"interpolation\")": 1,
+      "ReturnStatement": 2,
+      "ClassDeclaration": 1,
+      "Other(\"parameters\")": 4,
+      "Module": 1,
+      "Other(\"decorated_definition\")": 1
+    }
+  },
+  "entities": [
+    {
+      "name": "SimpleClass",
+      "entity_type": "Class",
+      "location_summary": "2:0-14:37",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "__init__",
+      "entity_type": "Method",
+      "location_summary": "3:4-4:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "formatted_value",
+      "entity_type": "Method",
+      "location_summary": "13:4-14:37",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "get_value",
+      "entity_type": "Method",
+      "location_summary": "6:4-7:25",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "self",
+      "entity_type": "Variable",
+      "location_summary": "4:8-4:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "self",
+      "entity_type": "Variable",
+      "location_summary": "10:8-10:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "set_value",
+      "entity_type": "Method",
+      "location_summary": "9:4-10:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [],
+  "metrics": {
+    "total_lines": 14,
+    "classes_count": 1,
+    "functions_count": 4,
+    "complexity_score": 21.8,
+    "language_specific_keys": [
+      "comprehensions_count",
+      "decorators_count"
+    ]
+  }
+}

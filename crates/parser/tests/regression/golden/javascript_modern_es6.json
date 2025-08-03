@@ -1,0 +1,407 @@
+{
+  "source_hash": "363fa4800119a11b",
+  "ast_summary": {
+    "language": "JavaScript",
+    "root_type": "Program",
+    "total_nodes": 2002,
+    "node_type_counts": {
+      "Other(\"optional_chain\")": 2,
+      "Other(\"computed_property_name\")": 1,
+      "Other(\"named_imports\")": 2,
+      "Literal": 51,
+      "Other(\"parenthesized_expression\")": 23,
+      "Other(\"spread_element\")": 6,
+      "Other(\"this\")": 33,
+      "Other(\"string_fragment\")": 69,
+      "Other(\"import_specifier\")": 3,
+      "Other(\"try_statement\")": 7,
+      "Other(\"let\")": 6,
+      "Other(\"array_pattern\")": 6,
+      "Other(\"private_property_identifier\")": 33,
+      "Other(\"async\")": 12,
+      "Other(\"jsx_expression\")": 5,
+      "Other(\"shorthand_property_identifier\")": 17,
+      "Other(\"variable_declarator\")": 55,
+      "Other(\"object_assignment_pattern\")": 8,
+      "Other(\"export\")": 4,
+      "Other(\"import\")": 7,
+      "Other(\"export_specifier\")": 6,
+      "Other(\"export_statement\")": 4,
+      "Other(\"jsx_element\")": 5,
+      "Other(\"finally_clause\")": 3,
+      "Other(\"arguments\")": 117,
+      "MemberExpression": 146,
+      "Other(\"ternary_expression\")": 6,
+      "Program": 1,
+      "Other(\"object\")": 33,
+      "Other(\"formal_parameters\")": 39,
+      "Other(\"jsx_closing_element\")": 5,
+      "Other(\"yield_expression\")": 2,
+      "ClassDeclaration": 1,
+      "MethodDeclaration": 14,
+      "Other(\"else_clause\")": 2,
+      "Other(\"number\")": 27,
+      "Other(\"await_expression\")": 18,
+      "Other(\"null\")": 5,
+      "Other(\"jsx_attribute\")": 1,
+      "Other(\"false\")": 7,
+      "ImportDeclaration": 5,
+      "Other(\"import_clause\")": 5,
+      "Other(\"statement_block\")": 66,
+      "Other(\"true\")": 7,
+      "Other(\"class_body\")": 1,
+      "Other(\"class_heritage\")": 1,
+      "Other(\"lexical_declaration\")": 55,
+      "Other(\"assignment_expression\")": 10,
+      "Other(\"pair\")": 47,
+      "Other(\"expression_statement\")": 52,
+      "Other(\"template_substitution\")": 17,
+      "FunctionDeclaration": 31,
+      "Other(\"array\")": 12,
+      "Other(\"jsx_text\")": 4,
+      "Other(\"binary_expression\")": 26,
+      "Other(\"super\")": 1,
+      "Other(\"function_expression\")": 1,
+      "Identifier": 378,
+      "Other(\"update_expression\")": 2,
+      "Other(\"property_identifier\")": 179,
+      "Other(\"object_pattern\")": 7,
+      "Other(\"template_string\")": 11,
+      "Other(\"await\")": 20,
+      "Other(\"augmented_assignment_expression\")": 1,
+      "ForStatement": 6,
+      "Other(\"class\")": 1,
+      "Other(\"assignment_pattern\")": 6,
+      "Other(\"shorthand_property_identifier_pattern\")": 14,
+      "CallExpression": 107,
+      "IfStatement": 13,
+      "Other(\"throw_statement\")": 6,
+      "Other(\"break_statement\")": 2,
+      "ReturnStatement": 23,
+      "Other(\"unary_expression\")": 6,
+      "Other(\"jsx_opening_element\")": 5,
+      "Other(\"export_clause\")": 3,
+      "Other(\"new_expression\")": 10,
+      "Other(\"catch_clause\")": 6,
+      "Other(\"pair_pattern\")": 1,
+      "Other(\"field_definition\")": 5,
+      "Other(\"rest_pattern\")": 2,
+      "WhileStatement": 1,
+      "Other(\"const\")": 54
+    }
+  },
+  "entities": [
+    {
+      "name": "DataProcessor",
+      "entity_type": "Class",
+      "location_summary": "52:0-296:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "DataProcessor",
+      "entity_type": "Function",
+      "location_summary": "359:40-360:51",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "_",
+      "entity_type": "Function",
+      "location_summary": "452:51-460:6",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "a",
+      "entity_type": "Function",
+      "location_summary": "470:28-470:55",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "batch",
+      "entity_type": "Method",
+      "location_summary": "159:4-194:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "cancelled",
+      "entity_type": "Function",
+      "location_summary": "381:20-413:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "cancelled",
+      "entity_type": "Function",
+      "location_summary": "410:15-412:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "config",
+      "entity_type": "Method",
+      "location_summary": "62:4-74:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "config",
+      "entity_type": "Method",
+      "location_summary": "272:4-274:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "controller",
+      "entity_type": "Method",
+      "location_summary": "199:37-199:61",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Method",
+      "location_summary": "88:4-106:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Method",
+      "location_summary": "109:4-124:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Method",
+      "location_summary": "127:4-131:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Method",
+      "location_summary": "277:4-295:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Function",
+      "location_summary": "309:25-338:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Function",
+      "location_summary": "384:28-406:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Function",
+      "location_summary": "468:8-468:59",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Function",
+      "location_summary": "469:8-469:66",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Function",
+      "location_summary": "470:8-470:56",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "demonstrateFeatures",
+      "entity_type": "Function",
+      "location_summary": "446:0-485:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "event",
+      "entity_type": "Function",
+      "location_summary": "364:35-366:13",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "field",
+      "entity_type": "Method",
+      "location_summary": "280:40-280:62",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "handleProgress",
+      "entity_type": "Function",
+      "location_summary": "363:24-373:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Method",
+      "location_summary": "164:39-175:13",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Method",
+      "location_summary": "197:4-247:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Method",
+      "location_summary": "249:4-251:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Method",
+      "location_summary": "278:26-281:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Function",
+      "location_summary": "325:44-325:63",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Function",
+      "location_summary": "423:31-427:13",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Function",
+      "location_summary": "468:30-468:58",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Function",
+      "location_summary": "469:27-469:65",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "ms",
+      "entity_type": "Method",
+      "location_summary": "267:4-269:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "pipelineCount",
+      "entity_type": "Function",
+      "location_summary": "299:34-349:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "processedData",
+      "entity_type": "Function",
+      "location_summary": "352:26-430:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "processor",
+      "entity_type": "Function",
+      "location_summary": "358:29-376:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "processor",
+      "entity_type": "Function",
+      "location_summary": "370:19-372:13",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "query",
+      "entity_type": "Method",
+      "location_summary": "134:4-156:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "query",
+      "entity_type": "Method",
+      "location_summary": "253:4-265:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "resolve",
+      "entity_type": "Method",
+      "location_summary": "268:27-268:61",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Method",
+      "location_summary": "179:31-184:14",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "results",
+      "entity_type": "Function",
+      "location_summary": "488:1-495:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "size",
+      "entity_type": "Method",
+      "location_summary": "81:4-85:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [
+    {
+      "from_entity": "DataProcessor",
+      "to_entity": "extends EventEmitter",
+      "relation_type": "Inheritance",
+      "location_summary": "52:0-296:1"
+    }
+  ],
+  "metrics": {
+    "total_lines": 495,
+    "classes_count": 1,
+    "functions_count": 31,
+    "complexity_score": 81.37,
+    "language_specific_keys": [
+      "arrow_functions_count",
+      "async_functions_count"
+    ]
+  }
+}

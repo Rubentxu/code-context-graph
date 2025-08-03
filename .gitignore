@@ -1,0 +1,27 @@
+# Rust
+/target
+**/target/
+
+# Storage
+cas_store/
+context/
+*.db
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.claude

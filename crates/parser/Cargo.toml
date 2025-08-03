@@ -1,0 +1,30 @@
+[package]
+name = "code-context-graph-parser"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+code-context-graph-core = { path = "../core" }
+tree-sitter = { workspace = true }
+tree-sitter-python = { workspace = true }
+tree-sitter-java = { workspace = true }
+tree-sitter-javascript = { workspace = true }
+tree-sitter-kotlin-ng = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+walkdir = { workspace = true }
+tracing = { workspace = true }
+tempfile = "3.8"
+
+[dev-dependencies]
+proptest = "1.4"          # Property-based testing
+criterion = "0.5"         # Benchmarking
+pretty_assertions = "1.4" # Better test output
+test-case = "3.3"         # Parameterized tests

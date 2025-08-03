@@ -1,0 +1,75 @@
+{
+  "source_hash": "18973bc6f04b07f",
+  "ast_summary": {
+    "language": "JavaScript",
+    "root_type": "Program",
+    "total_nodes": 57,
+    "node_type_counts": {
+      "Other(\"await_expression\")": 1,
+      "Other(\"string_fragment\")": 1,
+      "ClassDeclaration": 1,
+      "MemberExpression": 4,
+      "Other(\"formal_parameters\")": 4,
+      "Other(\"property_identifier\")": 8,
+      "Other(\"statement_block\")": 4,
+      "Other(\"assignment_expression\")": 2,
+      "Other(\"class_body\")": 1,
+      "CallExpression": 2,
+      "Other(\"await\")": 1,
+      "Other(\"arguments\")": 2,
+      "Literal": 1,
+      "Identifier": 8,
+      "Other(\"expression_statement\")": 2,
+      "Other(\"variable_declarator\")": 1,
+      "Other(\"class\")": 1,
+      "Other(\"this\")": 3,
+      "Other(\"lexical_declaration\")": 1,
+      "Program": 1,
+      "ReturnStatement": 2,
+      "MethodDeclaration": 4,
+      "Other(\"const\")": 1,
+      "Other(\"async\")": 1
+    }
+  },
+  "entities": [
+    {
+      "name": "SimpleClass",
+      "entity_type": "Class",
+      "location_summary": "2:0-19:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "response",
+      "entity_type": "Method",
+      "location_summary": "15:4-18:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "value",
+      "entity_type": "Method",
+      "location_summary": "3:4-5:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "value",
+      "entity_type": "Method",
+      "location_summary": "11:4-13:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [],
+  "metrics": {
+    "total_lines": 19,
+    "classes_count": 1,
+    "functions_count": 0,
+    "complexity_score": 20.0,
+    "language_specific_keys": [
+      "arrow_functions_count",
+      "async_functions_count"
+    ]
+  }
+}

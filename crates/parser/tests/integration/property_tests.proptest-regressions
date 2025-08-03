@@ -1,0 +1,9 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc ec8641326d19801bb2220742d90602de4796068ae20829d20c72a9f6a581850c # shrinks to code = "class A:\n"
+cc 929b42e9034e746bb3aadb703ef4b345ebd2b7d42ba7d3b92e78e81549564d3a # shrinks to class_name = "_", method_name = "A"
+cc 9a5e77adda4a475142e04b7692c83f9a35d93542ec6d2f1c9f971d1e3eece2c3 # shrinks to broken_code = "class a { "

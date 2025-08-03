@@ -1,0 +1,386 @@
+
+use code_context_graph_parser::{
+    ast::{ASTNodeType, SimplifiedAST},
+    language::registry::ParserRegistry,
+    visitor::{
+        entity_extractor::{EntityExtractor, EntityType},
+        relation_extractor::{RelationExtractor, RelationType},
+        metadata_collector::MetadataCollector,
+        base::{ASTVisitor, VisitorContext}
+    }
+};
+use code_context_graph_core::Language;
+use std::fs;
+use std::path::PathBuf;
+use pretty_assertions::assert_eq;
+use code_context_graph_parser::test_utils::TestUtils;
+
+/// End-to-end integration tests that verify the complete parsing pipeline
+/// from source code to semantic graph extraction.
+
+#[test]
+fn test_java_complex_inheritance_parsing() {
+    let fixture_path = get_fixture_path("java/complex_inheritance.java");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read Java fixture");
+    
+    // Test parsing
+    let ast = TestUtils::parse_source(&source, Language::Java)
+        .expect("Failed to parse Java source");
+    
+    // Verify basic structure
+    assert_eq!(ast.language, Language::Java);
+    assert_eq!(ast.root.node_type, ASTNodeType::Program);
+    
+    // Test that we found expected classes
+    TestUtils::assert_contains_named_node(&ast, "Animal", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Bird", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Duck", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Eagle", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "AnimalUtils", &ASTNodeType::ClassDeclaration);
+    
+    // Test interfaces
+    TestUtils::assert_contains_named_node(&ast, "Flyable", &ASTNodeType::InterfaceDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Swimmable", &ASTNodeType::InterfaceDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Predator", &ASTNodeType::InterfaceDeclaration);
+    
+    // Test node counts
+    TestUtils::assert_node_count(&ast, &ASTNodeType::ClassDeclaration, 5);
+    TestUtils::assert_node_count(&ast, &ASTNodeType::InterfaceDeclaration, 3);
+    
+    // Test that we have methods
+    let function_count = count_functions_and_methods(&ast);
+    assert!(function_count > 15, "Expected more than 15 functions/methods, found {}", function_count);
+}
+
+#[test]
+fn test_python_decorators_parsing() {
+    let fixture_path = get_fixture_path("python/decorators_example.py");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read Python fixture");
+    
+    let ast = TestUtils::parse_source(&source, Language::Python)
+        .expect("Failed to parse Python source");
+    
+    // Verify structure
+    assert_eq!(ast.language, Language::Python);
+    
+    // Test classes
+    TestUtils::assert_contains_named_node(&ast, "DatabaseManager", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Shape", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Rectangle", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Circle", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "Container", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "AsyncProcessor", &ASTNodeType::ClassDeclaration);
+    
+    // Test functions
+    TestUtils::assert_contains_named_node(&ast, "timing_decorator", &ASTNodeType::FunctionDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "async_retry", &ASTNodeType::FunctionDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "complex_calculation", &ASTNodeType::FunctionDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "demonstrate_features", &ASTNodeType::FunctionDeclaration);
+    
+    // Test that we found decorators
+    TestUtils::assert_node_count(&ast, &ASTNodeType::Decorator, 4); // Should find @dataclass, @timing_decorator, etc.
+}
+
+#[test]
+fn test_javascript_modern_es6_parsing() {
+    let fixture_path = get_fixture_path("javascript/modern_es6.js");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read JavaScript fixture");
+    
+    let ast = TestUtils::parse_source(&source, Language::JavaScript)
+        .expect("Failed to parse JavaScript source");
+    
+    // Verify structure
+    assert_eq!(ast.language, Language::JavaScript);
+    
+    // Test classes
+    TestUtils::assert_contains_named_node(&ast, "DataProcessor", &ASTNodeType::ClassDeclaration);
+    
+    // Test functions
+    TestUtils::assert_contains_named_node(&ast, "createProcessingPipeline", &ASTNodeType::FunctionDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "demonstrateFeatures", &ASTNodeType::FunctionDeclaration);
+    
+    // Test imports
+    TestUtils::assert_node_count(&ast, &ASTNodeType::ImportDeclaration, 6); // Multiple import statements
+}
+
+#[test]
+fn test_kotlin_coroutines_parsing() {
+    let fixture_path = get_fixture_path("kotlin/coroutines_example.kt");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read Kotlin fixture");
+    
+    let ast = TestUtils::parse_source(&source, Language::Kotlin)
+        .expect("Failed to parse Kotlin source");
+    
+    // Verify structure
+    assert_eq!(ast.language, Language::Kotlin);
+    
+    // Test sealed classes
+    TestUtils::assert_contains_named_node(&ast, "Result", &ASTNodeType::ClassDeclaration);
+    
+    // Test data classes
+    TestUtils::assert_contains_named_node(&ast, "User", &ASTNodeType::ClassDeclaration);
+    
+    // Test enums
+    TestUtils::assert_contains_named_node(&ast, "ProcessingStatus", &ASTNodeType::EnumDeclaration);
+    
+    // Test interfaces
+    TestUtils::assert_contains_named_node(&ast, "DataProcessor", &ASTNodeType::InterfaceDeclaration);
+    
+    // Test classes
+    TestUtils::assert_contains_named_node(&ast, "AsyncDataProcessor", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "UserManager", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "AsyncWorkflowBuilder", &ASTNodeType::ClassDeclaration);
+    
+    // Test object
+    TestUtils::assert_contains_named_node(&ast, "ConfigurationManager", &ASTNodeType::ClassDeclaration); // Object in Kotlin is treated as class
+    
+    // Test functions
+    TestUtils::assert_contains_named_node(&ast, "demonstrateComplexFeatures", &ASTNodeType::FunctionDeclaration);
+    TestUtils::assert_contains_named_node(&ast, "main", &ASTNodeType::FunctionDeclaration);
+}
+
+#[test]
+fn test_entity_extraction_end_to_end() {
+    // Test with Java fixture
+    let fixture_path = get_fixture_path("java/complex_inheritance.java");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read Java fixture");
+    
+    let ast = TestUtils::parse_source(&source, Language::Java)
+        .expect("Failed to parse Java source");
+    
+    let mut context = TestUtils::create_test_context(Language::Java, &source, "complex_inheritance.java");
+    let mut extractor = EntityExtractor::new();
+    
+    let entities = extractor.visit_ast(&ast, &mut context)
+        .expect("Failed to extract entities");
+    
+    // Verify we extracted the right entities
+    assert!(entities.len() > 20, "Expected more than 20 entities, found {}", entities.len());
+    
+    // Check for specific entities
+    let classes: Vec<_> = entities.iter()
+        .filter(|e| e.entity_type == EntityType::Class)
+        .collect();
+    assert_eq!(classes.len(), 5, "Expected 5 classes");
+    
+    let interfaces: Vec<_> = entities.iter()
+        .filter(|e| e.entity_type == EntityType::Interface)
+        .collect();
+    assert_eq!(interfaces.len(), 3, "Expected 3 interfaces");
+    
+    let methods: Vec<_> = entities.iter()
+        .filter(|e| e.entity_type == EntityType::Method)
+        .collect();
+    assert!(methods.len() > 10, "Expected more than 10 methods, found {}", methods.len());
+    
+    // Verify entity names
+    let entity_names: Vec<&String> = entities.iter().map(|e| &e.name).collect();
+    assert!(entity_names.contains(&&"Animal".to_string()));
+    assert!(entity_names.contains(&&"Flyable".to_string()));
+    assert!(entity_names.contains(&&"makeSound".to_string()));
+}
+
+#[test]
+fn test_relation_extraction_end_to_end() {
+    // Test with Java fixture
+    let fixture_path = get_fixture_path("java/complex_inheritance.java");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read Java fixture");
+    
+    let ast = TestUtils::parse_source(&source, Language::Java)
+        .expect("Failed to parse Java source");
+    
+    let mut context = TestUtils::create_test_context(Language::Java, &source, "complex_inheritance.java");
+    let mut extractor = RelationExtractor::new();
+    
+    let relations = extractor.visit_ast(&ast, &mut context)
+        .expect("Failed to extract relations");
+    
+    // Verify we extracted relations
+    assert!(relations.len() > 5, "Expected more than 5 relations, found {}", relations.len());
+    
+    // Check for inheritance relations
+    let inheritance_relations: Vec<_> = relations.iter()
+        .filter(|r| r.relation_type == RelationType::Inheritance)
+        .collect();
+    assert!(inheritance_relations.len() > 0, "Expected inheritance relations");
+    
+    // Check for function call relations
+    let call_relations: Vec<_> = relations.iter()
+        .filter(|r| r.relation_type == RelationType::CallsFunction)
+        .collect();
+    assert!(call_relations.len() > 0, "Expected function call relations");
+}
+
+#[test]
+fn test_metadata_collection_end_to_end() {
+    // Test with Python fixture that has complex metadata
+    let fixture_path = get_fixture_path("python/decorators_example.py");
+    let source = fs::read_to_string(&fixture_path)
+        .expect("Failed to read Python fixture");
+    
+    let ast = TestUtils::parse_source(&source, Language::Python)
+        .expect("Failed to parse Python source");
+    
+    let mut context = TestUtils::create_test_context(Language::Python, &source, "decorators_example.py");
+    let mut collector = MetadataCollector::new();
+    
+    let (metrics, entity_metadata) = collector.visit_ast(&ast, &mut context)
+        .expect("Failed to collect metadata");
+    
+    // Verify basic metrics
+    assert!(metrics.total_lines > 200, "Expected more than 200 lines");
+    assert!(metrics.classes_count > 5, "Expected more than 5 classes");
+    assert!(metrics.functions_count > 10, "Expected more than 10 functions");
+    assert!(metrics.complexity_score > 1.0, "Expected complexity score > 1.0");
+    
+    // Verify language-specific metadata
+    assert!(metrics.language_specific.contains_key("decorators_count"));
+    
+    // Verify entity metadata
+    assert!(entity_metadata.len() > 15, "Expected more than 15 entity metadata entries");
+    
+    // Check for specific metadata
+    let complex_entities: Vec<_> = entity_metadata.iter()
+        .filter(|e| e.cyclomatic_complexity > 3)
+        .collect();
+    assert!(complex_entities.len() > 0, "Expected some complex entities");
+}
+
+#[test]
+fn test_multifile_project_simulation() {
+    // Create a temporary project with multiple files
+    let temp_dir = TestUtils::create_temp_project()
+        .expect("Failed to create temp project");
+    
+    // Create Java files
+    let java_main = r#"
+package com.example;
+
+import com.example.models.User;
+import com.example.services.UserService;
+
+public class Main {
+    public static void main(String[] args) {
+        UserService service = new UserService();
+        User user = service.createUser("Alice", "alice@example.com");
+        System.out.println(user.getName());
+    }
+}
+"#;
+    
+    let java_user = r#"
+package com.example.models;
+
+public class User {
+    private String name;
+    private String email;
+    
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+    
+    public String getName() { return name; }
+    public String getEmail() { return email; }
+}
+"#;
+    
+    let java_service = r#"
+package com.example.services;
+
+import com.example.models.User;
+
+public class UserService {
+    public User createUser(String name, String email) {
+        return new User(name, email);
+    }
+}
+"#;
+    
+    // Write test files
+    TestUtils::create_test_file(&temp_dir, "Main.java", java_main)
+        .expect("Failed to create Main.java");
+    TestUtils::create_test_file(&temp_dir, "User.java", java_user)
+        .expect("Failed to create User.java");
+    TestUtils::create_test_file(&temp_dir, "UserService.java", java_service)
+        .expect("Failed to create UserService.java");
+    
+    // Parse each file
+    let main_ast = TestUtils::parse_source(java_main, Language::Java)
+        .expect("Failed to parse Main.java");
+    let user_ast = TestUtils::parse_source(java_user, Language::Java)
+        .expect("Failed to parse User.java");
+    let service_ast = TestUtils::parse_source(java_service, Language::Java)
+        .expect("Failed to parse UserService.java");
+    
+    // Verify each file parsed correctly
+    TestUtils::assert_contains_named_node(&main_ast, "Main", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&user_ast, "User", &ASTNodeType::ClassDeclaration);
+    TestUtils::assert_contains_named_node(&service_ast, "UserService", &ASTNodeType::ClassDeclaration);
+    
+    // Verify imports are detected
+    TestUtils::assert_node_count(&main_ast, &ASTNodeType::ImportDeclaration, 2);
+    TestUtils::assert_node_count(&service_ast, &ASTNodeType::ImportDeclaration, 1);
+    
+    // Extract entities from all files
+    let files = vec![
+        ("Main.java", main_ast, java_main),
+        ("User.java", user_ast, java_user),
+        ("UserService.java", service_ast, java_service),
+    ];
+    
+    let mut all_entities = Vec::new();
+    let mut all_relations = Vec::new();
+    
+    for (filename, ast, source) in files {
+        let mut context = TestUtils::create_test_context(Language::Java, source, filename);
+        
+        let mut entity_extractor = EntityExtractor::new();
+        let entities = entity_extractor.visit_ast(&ast, &mut context)
+            .expect("Failed to extract entities");
+        all_entities.extend(entities);
+        
+        let mut relation_extractor = RelationExtractor::new();
+        let relations = relation_extractor.visit_ast(&ast, &mut context)
+            .expect("Failed to extract relations");
+        all_relations.extend(relations);
+    }
+    
+    // Verify we found entities from all files
+    assert_eq!(all_entities.iter().filter(|e| e.entity_type == EntityType::Class).count(), 3);
+    
+    // Verify we found some relations (imports, method calls)
+    assert!(all_relations.len() > 2, "Expected some relations between files");
+}
+
+// Helper functions
+
+fn get_fixture_path(relative_path: &str) -> PathBuf {
+    let mut path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    path.push("tests/fixtures");
+    path.push(relative_path);
+    path
+}
+
+fn count_functions_and_methods(ast: &SimplifiedAST) -> usize {
+    count_node_types_recursive(&ast.root, &[
+        ASTNodeType::FunctionDeclaration,
+        ASTNodeType::MethodDeclaration,
+    ])
+}
+
+fn count_node_types_recursive(node: &code_context_graph_parser::ast::ASTNode, target_types: &[ASTNodeType]) -> usize {
+    let mut count = if target_types.contains(&node.node_type) { 1 } else { 0 };
+    
+    for child in &node.children {
+        count += count_node_types_recursive(child, target_types);
+    }
+    
+    count
+}

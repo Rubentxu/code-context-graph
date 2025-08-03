@@ -1,0 +1,457 @@
+use proptest::prelude::*;
+use code_context_graph_parser::ast::{ASTNodeType, NodeLocation};
+use code_context_graph_parser::visitor::{
+    entity_extractor::{EntityExtractor, EntityType},
+    base::ASTVisitor
+};
+use code_context_graph_core::Language;
+use code_context_graph_parser::test_utils::TestUtils;
+
+/// Property-based tests that verify invariants and properties
+/// that should hold for all valid inputs to the parser system.
+
+// Generators for creating test data
+
+prop_compose! {
+    fn valid_identifier()(
+        name in "[a-zA-Z_][a-zA-Z0-9_]*"
+    ) -> String {
+        name
+    }
+}
+
+prop_compose! {
+    fn java_class_code()(
+        class_name in valid_identifier(),
+        method_names in prop::collection::vec(valid_identifier(), 0..5),
+        is_public in any::<bool>(),
+        is_abstract in any::<bool>()
+    ) -> String {
+        let visibility = if is_public { "public " } else { "" };
+        let abstract_mod = if is_abstract { "abstract " } else { "" };
+        
+        let methods = method_names.into_iter()
+            .map(|name| {
+                if is_abstract {
+                    format!("    public abstract void {}();", name)
+                } else {
+                    format!("    public void {}() {{ System.out.println(\"{}\"); }}", name, name)
+                }
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+        
+        format!(
+            "{}{}class {} {{\n{}\n}}",
+            visibility, abstract_mod, class_name, methods
+        )
+    }
+}
+
+prop_compose! {
+    fn python_class_code()(
+        class_name in valid_identifier(),
+        method_names in prop::collection::vec(valid_identifier(), 0..5),
+        has_init in any::<bool>()
+    ) -> String {
+        let mut methods = method_names.into_iter()
+            .map(|name| format!("    def {}(self):\n        pass", name))
+            .collect::<Vec<_>>();
+        
+        if has_init {
+            methods.insert(0, "    def __init__(self):\n        pass".to_string());
+        }
+        
+        let methods_str = methods.join("\n\n");
+        
+        format!("class {}:\n{}", class_name, methods_str)
+    }
+}
+
+prop_compose! {
+    fn javascript_class_code()(
+        class_name in valid_identifier(),
+        method_names in prop::collection::vec(valid_identifier(), 0..5),
+        has_constructor in any::<bool>()
+    ) -> String {
+        let mut methods = method_names.into_iter()
+            .map(|name| format!("  {}() {{ console.log('{}'); }}", name, name))
+            .collect::<Vec<_>>();
+        
+        if has_constructor {
+            methods.insert(0, "  constructor() { this.value = 0; }".to_string());
+        }
+        
+        let methods_str = methods.join("\n\n");
+        
+        format!("class {} {{\n{}\n}}", class_name, methods_str)
+    }
+}
+
+prop_compose! {
+    fn kotlin_data_class_code()(
+        class_name in valid_identifier(),
+        property_names in prop::collection::vec(valid_identifier(), 1..5)
+    ) -> String {
+        let properties = property_names.into_iter()
+            .map(|name| format!("val {}: String", name))
+            .collect::<Vec<_>>()
+            .join(", ");
+        
+        format!("data class {}({})", class_name, properties)
+    }
+}
+
+// Property tests for parsing invariants
+
+proptest! {
+    #[test]
+    fn test_java_parsing_always_produces_program_root(
+        code in java_class_code()
+    ) {
+        let result = TestUtils::parse_source(&code, Language::Java);
+        
+        // Property: All valid Java code should parse to an AST with Program root
+        prop_assert!(result.is_ok(), "Java parsing should succeed for: {}", code);
+        
+        let ast = result.unwrap();
+        prop_assert_eq!(ast.root.node_type, ASTNodeType::Program);
+        prop_assert_eq!(ast.language, Language::Java);
+    }
+
+    #[test]
+    fn test_python_parsing_always_produces_program_root(
+        code in python_class_code()
+    ) {
+        let result = TestUtils::parse_source(&code, Language::Python);
+        
+        prop_assert!(result.is_ok(), "Python parsing should succeed for: {}", code);
+        
+        let ast = result.unwrap();
+        prop_assert_eq!(ast.root.node_type, ASTNodeType::Program);
+        prop_assert_eq!(ast.language, Language::Python);
+    }
+
+    #[test]
+    fn test_javascript_parsing_always_produces_program_root(
+        code in javascript_class_code()
+    ) {
+        let result = TestUtils::parse_source(&code, Language::JavaScript);
+        
+        prop_assert!(result.is_ok(), "JavaScript parsing should succeed for: {}", code);
+        
+        let ast = result.unwrap();
+        prop_assert_eq!(ast.root.node_type, ASTNodeType::Program);
+        prop_assert_eq!(ast.language, Language::JavaScript);
+    }
+
+    #[test]
+    fn test_kotlin_parsing_always_produces_program_root(
+        code in kotlin_data_class_code()
+    ) {
+        let result = TestUtils::parse_source(&code, Language::Kotlin);
+        
+        prop_assert!(result.is_ok(), "Kotlin parsing should succeed for: {}", code);
+        
+        let ast = result.unwrap();
+        prop_assert_eq!(ast.root.node_type, ASTNodeType::Program);
+        prop_assert_eq!(ast.language, Language::Kotlin);
+    }
+}
+
+proptest! {
+    #[test]
+    fn test_class_names_are_preserved_in_ast(
+        class_name in valid_identifier()
+    ) {
+        let java_code = format!("public class {} {{}}", class_name);
+        let python_code = format!("class {}:\n    pass", class_name);
+        let js_code = format!("class {} {{}}", class_name);
+        let kotlin_code = format!("class {}", class_name);
+        
+        for (code, language) in [
+            (java_code, Language::Java),
+            (python_code, Language::Python),
+            (js_code, Language::JavaScript),
+            (kotlin_code, Language::Kotlin),
+        ] {
+            let ast = TestUtils::parse_source(&code, language)
+                .expect(&format!("Failed to parse {} code: {}", format!("{:?}", language), code));
+            
+            // Property: Class names should be preserved in the AST
+            TestUtils::assert_contains_named_node(&ast, &class_name, &ASTNodeType::ClassDeclaration);
+        }
+    }
+}
+
+proptest! {
+    #[test]
+    fn test_entity_extraction_properties(
+        code in java_class_code()
+    ) {
+        let ast = TestUtils::parse_source(&code, Language::Java)
+            .expect("Failed to parse Java code");
+        
+        let mut context = TestUtils::create_test_context(Language::Java, &code, "test.java");
+        let mut extractor = EntityExtractor::new();
+        let entities = extractor.visit_ast(&ast, &mut context)
+            .expect("Failed to extract entities");
+        
+        // Property: Should always find at least one class entity
+        let class_entities: Vec<_> = entities.iter()
+            .filter(|e| e.entity_type == EntityType::Class)
+            .collect();
+        prop_assert!(!class_entities.is_empty(), "Should find at least one class entity");
+        
+        // Property: All entities should have valid names
+        for entity in &entities {
+            prop_assert!(!entity.name.is_empty(), "Entity name should not be empty");
+            prop_assert!(entity.name.chars().all(|c| c.is_alphanumeric() || c == '_'), 
+                       "Entity name should contain only alphanumeric characters and underscores: {}", entity.name);
+        }
+        
+        // Property: All entities should have valid locations
+        for entity in &entities {
+            prop_assert!(entity.location.start_line >= 1, "Start line should be >= 1");
+            prop_assert!(entity.location.end_line >= entity.location.start_line, 
+                        "End line should be >= start line");
+            prop_assert!(entity.location.start_byte <= entity.location.end_byte, 
+                        "Start byte should be <= end byte");
+        }
+    }
+}
+
+proptest! {
+    #[test]
+    fn test_node_location_properties(
+        start_line in 1u32..1000,
+        start_col in 0u32..100,
+        end_line in 1u32..1000,
+        end_col in 0u32..100,
+        start_byte in 0u32..10000,
+        end_byte in 0u32..10000
+    ) {
+        // Ensure end >= start for valid locations
+        let actual_end_line = start_line.max(end_line);
+        let actual_end_byte = start_byte.max(end_byte);
+        
+        let location = NodeLocation::new(
+            start_line,
+            start_col,
+            actual_end_line,
+            end_col,
+            start_byte,
+            actual_end_byte,
+        );
+        
+        // Property: Location invariants
+        prop_assert!(location.start_line >= 1, "Start line should be >= 1");
+        prop_assert!(location.end_line >= location.start_line, "End line should be >= start line");
+        prop_assert!(location.end_byte >= location.start_byte, "End byte should be >= start byte");
+        
+        // Property: Location methods should work correctly
+        let other_location = NodeLocation::new(
+            start_line + 1,
+            start_col,
+            actual_end_line + 1,
+            end_col,
+            start_byte + 10,
+            actual_end_byte + 10,
+        );
+        
+        // Contains relationship should be reflexive for identical locations
+        prop_assert!(location.contains(&location), "Location should contain itself");
+        
+        // Overlapping locations should detect correctly
+        if location.start_byte <= other_location.end_byte && other_location.start_byte <= location.end_byte {
+            prop_assert!(location.overlaps(&other_location), "Overlapping locations should be detected");
+        }
+    }
+}
+
+proptest! {
+    #[test]
+    fn test_parsing_is_deterministic(
+        code in java_class_code()
+    ) {
+        // Property: Parsing the same code multiple times should produce identical ASTs
+        let ast1 = TestUtils::parse_source(&code, Language::Java)
+            .expect("First parse should succeed");
+        let ast2 = TestUtils::parse_source(&code, Language::Java)
+            .expect("Second parse should succeed");
+        
+        // Compare structural properties
+        prop_assert_eq!(ast1.language, ast2.language);
+        prop_assert_eq!(&ast1.root.node_type, &ast2.root.node_type);
+        
+        // Compare entity extraction results
+        let mut context1 = TestUtils::create_test_context(Language::Java, &code, "test.java");
+        let mut extractor1 = EntityExtractor::new();
+        let entities1 = extractor1.visit_ast(&ast1, &mut context1)
+            .expect("First entity extraction should succeed");
+        
+        let mut context2 = TestUtils::create_test_context(Language::Java, &code, "test.java");
+        let mut extractor2 = EntityExtractor::new();
+        let entities2 = extractor2.visit_ast(&ast2, &mut context2)
+            .expect("Second entity extraction should succeed");
+        
+        prop_assert_eq!(entities1.len(), entities2.len(), "Should extract same number of entities");
+        
+        // Sort by name for comparison
+        let mut sorted1 = entities1;
+        let mut sorted2 = entities2;
+        sorted1.sort_by(|a, b| a.name.cmp(&b.name));
+        sorted2.sort_by(|a, b| a.name.cmp(&b.name));
+        
+        for (e1, e2) in sorted1.iter().zip(sorted2.iter()) {
+            prop_assert_eq!(&e1.name, &e2.name);
+            prop_assert_eq!(e1.entity_type, e2.entity_type);
+        }
+    }
+}
+
+proptest! {
+    #[test]
+    fn test_visitor_context_properties(
+        source_code in any::<String>().prop_filter("Non-empty source", |s| !s.is_empty()),
+        file_name in "[a-zA-Z0-9_]+\\.(java|py|js|kt)"
+    ) {
+        let language = match file_name.split('.').last().unwrap() {
+            "java" => Language::Java,
+            "py" => Language::Python,
+            "js" => Language::JavaScript,
+            "kt" => Language::Kotlin,
+            _ => Language::Unknown,
+        };
+        
+        if language == Language::Unknown {
+            return Ok(()); // Skip unknown languages
+        }
+        
+        let mut context = TestUtils::create_test_context(language, &source_code, &file_name);
+        
+        // Property: Context should preserve input data
+        prop_assert_eq!(context.language, language);
+        prop_assert_eq!(&context.source, &source_code);
+        prop_assert_eq!(context.file_path.to_string_lossy(), file_name);
+        
+        // Property: Scope operations should work correctly
+        let initial_scope_count = context.current_scope.len();
+        
+        context.push_scope("test_scope".to_string());
+        prop_assert_eq!(context.current_scope.len(), initial_scope_count + 1);
+        prop_assert!(context.current_scope_path().contains("test_scope"));
+        
+        let popped = context.pop_scope();
+        prop_assert_eq!(popped, Some("test_scope".to_string()));
+        prop_assert_eq!(context.current_scope.len(), initial_scope_count);
+        
+        // Property: Metadata operations should work correctly
+        context.add_metadata("test_key", "test_value");
+        let retrieved: Option<String> = context.get_metadata("test_key");
+        prop_assert_eq!(retrieved, Some("test_value".to_string()));
+    }
+}
+
+proptest! {
+    #[test]
+    fn test_parser_error_handling_properties(
+        broken_code in "class [a-zA-Z_]+ \\{ [^}]*" // Intentionally malformed code
+    ) {
+        // Property: Parser should handle malformed code gracefully (not panic)
+        for language in [Language::Java, Language::Python, Language::JavaScript, Language::Kotlin] {
+            let result = TestUtils::parse_source(&broken_code, language);
+            
+            // We don't require success, but we require no panics
+            // The parser should either succeed with some AST or fail gracefully
+            match result {
+                Ok(ast) => {
+                    // If parsing succeeds, should have valid root
+                    prop_assert_eq!(ast.root.node_type, ASTNodeType::Program);
+                    prop_assert_eq!(ast.language, language);
+                },
+                Err(_) => {
+                    // Graceful failure is acceptable for malformed code
+                }
+            }
+        }
+    }
+}
+
+proptest! {
+    #[test] 
+    fn test_large_input_properties(
+        base_code in java_class_code(),
+        repetitions in 1usize..10
+    ) {
+        // Property: Parser should handle large inputs proportionally
+        let large_code = base_code.repeat(repetitions);
+        
+        let result = TestUtils::parse_source(&large_code, Language::Java);
+        prop_assert!(result.is_ok(), "Large input parsing should succeed");
+        
+        let ast = result.unwrap();
+        
+        // Extract entities
+        let mut context = TestUtils::create_test_context(Language::Java, &large_code, "test.java");
+        let mut extractor = EntityExtractor::new();
+        let entities = extractor.visit_ast(&ast, &mut context)
+            .expect("Entity extraction should succeed");
+        
+        // Property: Number of entities should scale with repetitions
+        let class_count = entities.iter()
+            .filter(|e| e.entity_type == EntityType::Class)
+            .count();
+        
+        // We should have approximately repetitions * original_class_count classes
+        // (allowing for some parsing variations)
+        prop_assert!(class_count >= repetitions, 
+                    "Should have at least {} classes for {} repetitions, found {}", 
+                    repetitions, repetitions, class_count);
+    }
+}
+
+// Helper function to test property consistency across languages
+proptest! {
+    #[test]
+    fn test_cross_language_consistency(
+        class_name in valid_identifier(),
+        method_name in valid_identifier()
+    ) {
+        // Create similar structures in different languages
+        let java_code = format!("public class {} {{ public void {}() {{}} }}", class_name, method_name);
+        let python_code = format!("class {}:\n    def {}(self):\n        pass", class_name, method_name);
+        let js_code = format!("class {} {{ {}() {{}} }}", class_name, method_name);
+        let kotlin_code = format!("class {} {{ fun {}() {{}} }}", class_name, method_name);
+        
+        let test_cases = vec![
+            (java_code, Language::Java),
+            (python_code, Language::Python),
+            (js_code, Language::JavaScript),
+            (kotlin_code, Language::Kotlin),
+        ];
+        
+        for (code, language) in test_cases {
+            let ast = TestUtils::parse_source(&code, language)
+                .expect(&format!("Failed to parse {} code", format!("{:?}", language)));
+            
+            let mut context = TestUtils::create_test_context(language, &code, "test");
+            let mut extractor = EntityExtractor::new();
+            let entities = extractor.visit_ast(&ast, &mut context)
+                .expect("Entity extraction should succeed");
+            
+            // Property: All languages should find the class and method
+            let class_entities: Vec<_> = entities.iter()
+                .filter(|e| e.entity_type == EntityType::Class && e.name == class_name)
+                .collect();
+            prop_assert_eq!(class_entities.len(), 1, 
+                           "Should find exactly one class named '{}' in {:?}", class_name, language);
+            
+            let method_entities: Vec<_> = entities.iter()
+                .filter(|e| matches!(e.entity_type, EntityType::Method | EntityType::Function) && e.name == method_name)
+                .collect();
+            prop_assert!(!method_entities.is_empty(), 
+                        "Should find method/function named '{}' in {:?}", method_name, language);
+        }
+    }
+}

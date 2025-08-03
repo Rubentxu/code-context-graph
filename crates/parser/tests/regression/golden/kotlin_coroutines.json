@@ -1,0 +1,795 @@
+{
+  "source_hash": "2faf60b207fe3dbb",
+  "ast_summary": {
+    "language": "Kotlin",
+    "root_type": "Program",
+    "total_nodes": 2567,
+    "node_type_counts": {
+      "Other(\"data\")": 4,
+      "Other(\"in_expression\")": 2,
+      "Other(\"this_expression\")": 9,
+      "Other(\"visibility_modifier\")": 11,
+      "Other(\"class_modifier\")": 6,
+      "Other(\"function_type_parameters\")": 6,
+      "Other(\"type_test\")": 8,
+      "Other(\"type_arguments\")": 52,
+      "Other(\"range_expression\")": 1,
+      "Other(\"member_modifier\")": 2,
+      "Other(\"try_expression\")": 3,
+      "Other(\"index_expression\")": 4,
+      "Other(\"constructor_delegation_call\")": 1,
+      "Other(\"type_modifiers\")": 3,
+      "Other(\"interpolation\")": 13,
+      "Other(\"enum\")": 1,
+      "Other(\"variance_modifier\")": 1,
+      "Other(\"explicit_delegation\")": 1,
+      "ForStatement": 1,
+      "Other(\"class\")": 9,
+      "Other(\"anonymous_initializer\")": 1,
+      "Other(\"type_parameter_modifiers\")": 3,
+      "Other(\"package_header\")": 1,
+      "Other(\"function_value_parameters\")": 30,
+      "Other(\"enum_entry\")": 5,
+      "ClassDeclaration": 12,
+      "Annotation": 31,
+      "Other(\"is_expression\")": 2,
+      "Program": 1,
+      "Other(\"fun\")": 29,
+      "Other(\"getter\")": 2,
+      "Other(\"lambda_literal\")": 42,
+      "Other(\"class_parameter\")": 14,
+      "Other(\"class_body\")": 11,
+      "Other(\"string_content\")": 69,
+      "Other(\"parameter\")": 36,
+      "Other(\"primary_constructor\")": 7,
+      "Other(\"navigation_expression\")": 129,
+      "Other(\"parenthesized_expression\")": 3,
+      "Other(\"user_type\")": 162,
+      "Other(\"lambda_parameters\")": 19,
+      "VariableDeclaration": 57,
+      "Other(\"function_body\")": 30,
+      "Other(\"type_parameter\")": 12,
+      "Other(\"function_modifier\")": 13,
+      "Other(\"escape_sequence\")": 8,
+      "Other(\"return_expression\")": 10,
+      "Other(\"when_entry\")": 15,
+      "Other(\"import\")": 6,
+      "Other(\"if_expression\")": 4,
+      "Other(\"type_parameters\")": 12,
+      "Other(\"delegation_specifier\")": 5,
+      "Other(\"as_expression\")": 1,
+      "Other(\"companion_object\")": 4,
+      "BlockStatement": 25,
+      "Other(\"interface\")": 1,
+      "Other(\"qualified_identifier\")": 7,
+      "Other(\"catch_block\")": 3,
+      "Other(\"var\")": 1,
+      "Other(\"class_parameters\")": 7,
+      "Other(\"reification_modifier\")": 2,
+      "Other(\"assignment\")": 6,
+      "Identifier": 769,
+      "Other(\"number_literal\")": 35,
+      "Other(\"string_literal\")": 57,
+      "Other(\"type_projection\")": 54,
+      "Other(\"object\")": 6,
+      "Other(\"nullable_type\")": 3,
+      "Other(\"binary_expression\")": 19,
+      "Other(\"when_subject\")": 4,
+      "Other(\"function_type\")": 6,
+      "Other(\"when_expression\")": 6,
+      "Other(\"property_declaration\")": 34,
+      "Other(\"enum_class_body\")": 1,
+      "Other(\"annotated_lambda\")": 39,
+      "Other(\"constructor_invocation\")": 3,
+      "CallExpression": 172,
+      "Other(\"property_modifier\")": 2,
+      "Other(\"val\")": 48,
+      "Other(\"delegation_specifiers\")": 5,
+      "Other(\"value_arguments\")": 142,
+      "Other(\"secondary_constructor\")": 1,
+      "Other(\"sealed\")": 1,
+      "Other(\"value_argument\")": 154,
+      "Other(\"unary_expression\")": 1,
+      "FunctionDeclaration": 29
+    }
+  },
+  "entities": [
+    {
+      "name": "AsyncDataProcessor",
+      "entity_type": "Class",
+      "location_summary": "105:0-205:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "AsyncWorkflowBuilder",
+      "entity_type": "Class",
+      "location_summary": "298:0-332:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "ConfigurationManager",
+      "entity_type": "Class",
+      "location_summary": "248:0-260:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "DataProcessor",
+      "entity_type": "Class",
+      "location_summary": "89:0-102:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Error",
+      "entity_type": "Class",
+      "location_summary": "19:4-19:66",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "JvmRecord",
+      "entity_type": "Class",
+      "location_summary": "36:0-69:1",
+      "has_visibility": false,
+      "modifiers_count": 3
+    },
+    {
+      "name": "Loading",
+      "entity_type": "Class",
+      "location_summary": "20:4-20:38",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "MAX_AGE",
+      "entity_type": "Variable",
+      "location_summary": "56:18-56:25",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "MIN_AGE",
+      "entity_type": "Variable",
+      "location_summary": "55:18-55:25",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "ProcessingRequest",
+      "entity_type": "Class",
+      "location_summary": "118:4-121:5",
+      "has_visibility": false,
+      "modifiers_count": 3
+    },
+    {
+      "name": "ProcessingStatus",
+      "entity_type": "Class",
+      "location_summary": "72:0-86:1",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "R",
+      "entity_type": "Method",
+      "location_summary": "23:4-27:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Result",
+      "entity_type": "Class",
+      "location_summary": "17:0-33:1",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "Success",
+      "entity_type": "Class",
+      "location_summary": "18:4-18:52",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "T",
+      "entity_type": "Method",
+      "location_summary": "198:8-203:9",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "T",
+      "entity_type": "Function",
+      "location_summary": "208:0-221:1",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "T",
+      "entity_type": "Function",
+      "location_summary": "224:0-245:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "T",
+      "entity_type": "Method",
+      "location_summary": "255:4-257:5",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "T",
+      "entity_type": "Method",
+      "location_summary": "326:8-330:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "UserManager",
+      "entity_type": "Class",
+      "location_summary": "263:0-295:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "_status",
+      "entity_type": "Variable",
+      "location_summary": "111:16-111:23",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "batch",
+      "entity_type": "Variable",
+      "location_summary": "179:43-179:48",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "batch",
+      "entity_type": "Variable",
+      "location_summary": "372:19-372:24",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "batchResults",
+      "entity_type": "Variable",
+      "location_summary": "418:19-418:31",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "buffer",
+      "entity_type": "Variable",
+      "location_summary": "228:8-228:14",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "cached",
+      "entity_type": "Variable",
+      "location_summary": "271:12-271:18",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "channel",
+      "entity_type": "Variable",
+      "location_summary": "382:8-382:15",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "clearCache",
+      "entity_type": "Method",
+      "location_summary": "292:4-294:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "conditionalStep",
+      "entity_type": "Method",
+      "location_summary": "306:4-314:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "config",
+      "entity_type": "Variable",
+      "location_summary": "249:16-249:22",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "create",
+      "entity_type": "Method",
+      "location_summary": "61:8-67:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "createGuest",
+      "entity_type": "Method",
+      "location_summary": "58:8-58:82",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Variable",
+      "location_summary": "172:27-172:31",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Variable",
+      "location_summary": "310:20-310:24",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "data",
+      "entity_type": "Variable",
+      "location_summary": "317:47-317:51",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "debugMode",
+      "entity_type": "Variable",
+      "location_summary": "429:8-429:17",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "deferred",
+      "entity_type": "Variable",
+      "location_summary": "132:12-132:20",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "demonstrateComplexFeatures",
+      "entity_type": "Function",
+      "location_summary": "335:0-442:1",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "errorCount",
+      "entity_type": "Variable",
+      "location_summary": "420:16-420:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "execute",
+      "entity_type": "Method",
+      "location_summary": "316:4-323:5",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "fromPriority",
+      "entity_type": "Method",
+      "location_summary": "82:8-84:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "getOrNull",
+      "entity_type": "Method",
+      "location_summary": "29:4-32:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "has",
+      "entity_type": "Method",
+      "location_summary": "259:4-259:59",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "hasRole",
+      "entity_type": "Method",
+      "location_summary": "52:4-52:61",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "index",
+      "entity_type": "Variable",
+      "location_summary": "364:37-364:42",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "isActive",
+      "entity_type": "Method",
+      "location_summary": "79:4-79:63",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "isAdult",
+      "entity_type": "Variable",
+      "location_summary": "48:8-48:24",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "isValid",
+      "entity_type": "Variable",
+      "location_summary": "100:10-100:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Variable",
+      "location_summary": "180:38-180:42",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Variable",
+      "location_summary": "191:17-191:21",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Variable",
+      "location_summary": "214:10-214:14",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "item",
+      "entity_type": "Variable",
+      "location_summary": "231:14-231:18",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "lastEmission",
+      "entity_type": "Variable",
+      "location_summary": "229:8-229:20",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "main",
+      "entity_type": "Function",
+      "location_summary": "445:0-452:1",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "maxUsers",
+      "entity_type": "Variable",
+      "location_summary": "428:8-428:16",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "now",
+      "entity_type": "Variable",
+      "location_summary": "233:12-233:15",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "parallelResults",
+      "entity_type": "Variable",
+      "location_summary": "363:8-363:23",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "process",
+      "entity_type": "Method",
+      "location_summary": "90:4-90:43",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "process",
+      "entity_type": "Method",
+      "location_summary": "131:4-137:5",
+      "has_visibility": false,
+      "modifiers_count": 3
+    },
+    {
+      "name": "process",
+      "entity_type": "Method",
+      "location_summary": "270:4-283:5",
+      "has_visibility": false,
+      "modifiers_count": 3
+    },
+    {
+      "name": "processBatch",
+      "entity_type": "Method",
+      "location_summary": "178:4-186:33",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "processFlow",
+      "entity_type": "Method",
+      "location_summary": "171:4-175:28",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "processRequests",
+      "entity_type": "Method",
+      "location_summary": "140:4-168:5",
+      "has_visibility": false,
+      "modifiers_count": 3
+    },
+    {
+      "name": "processUsers",
+      "entity_type": "Method",
+      "location_summary": "286:4-290:5",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "processWithTimeout",
+      "entity_type": "Method",
+      "location_summary": "93:4-97:5",
+      "has_visibility": false,
+      "modifiers_count": 2
+    },
+    {
+      "name": "processingChannel",
+      "entity_type": "Variable",
+      "location_summary": "115:16-115:33",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "processor",
+      "entity_type": "Variable",
+      "location_summary": "339:8-339:17",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "produceResults",
+      "entity_type": "Method",
+      "location_summary": "189:4-194:9",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "request",
+      "entity_type": "Variable",
+      "location_summary": "133:12-133:19",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "request",
+      "entity_type": "Variable",
+      "location_summary": "142:23-142:30",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "151:32-151:38",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "276:25-276:31",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "317:12-317:18",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "357:12-357:18",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "364:44-364:50",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "375:20-375:26",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "385:12-385:18",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "result",
+      "entity_type": "Variable",
+      "location_summary": "407:12-407:18",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "results",
+      "entity_type": "Variable",
+      "location_summary": "180:16-180:23",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "semaphore",
+      "entity_type": "Variable",
+      "location_summary": "114:16-114:25",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "semaphore",
+      "entity_type": "Variable",
+      "location_summary": "212:8-212:17",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "set",
+      "entity_type": "Method",
+      "location_summary": "251:4-253:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "status",
+      "entity_type": "Variable",
+      "location_summary": "112:8-112:43",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "status",
+      "entity_type": "Variable",
+      "location_summary": "435:35-435:41",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "step",
+      "entity_type": "Method",
+      "location_summary": "301:4-304:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "step",
+      "entity_type": "Variable",
+      "location_summary": "317:53-317:57",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "steps",
+      "entity_type": "Variable",
+      "location_summary": "299:16-299:21",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "successCount",
+      "entity_type": "Variable",
+      "location_summary": "419:16-419:28",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "287:24-287:28",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "356:20-356:24",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "374:28-374:32",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "392:15-392:19",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "395:23-395:27",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "400:15-400:19",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "user",
+      "entity_type": "Variable",
+      "location_summary": "406:28-406:32",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "userCache",
+      "entity_type": "Variable",
+      "location_summary": "267:16-267:25",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "users",
+      "entity_type": "Variable",
+      "location_summary": "345:8-345:13",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "workflow",
+      "entity_type": "Variable",
+      "location_summary": "391:8-391:16",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [],
+  "metrics": {
+    "total_lines": 452,
+    "classes_count": 12,
+    "functions_count": 29,
+    "complexity_score": 91.05,
+    "language_specific_keys": [
+      "data_classes_count",
+      "suspend_functions_count"
+    ]
+  }
+}

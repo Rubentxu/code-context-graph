@@ -1,0 +1,369 @@
+{
+  "source_hash": "9b0b3d55b6679043",
+  "ast_summary": {
+    "language": "Java",
+    "root_type": "Program",
+    "total_nodes": 760,
+    "node_type_counts": {
+      "Other(\"final\")": 1,
+      "Other(\"interface\")": 3,
+      "Other(\"type_bound\")": 1,
+      "Other(\"constructor_body\")": 5,
+      "Other(\"string_fragment\")": 20,
+      "VariableDeclaration": 1,
+      "MethodDeclaration": 26,
+      "Other(\"generic_type\")": 8,
+      "BlockStatement": 19,
+      "Other(\"abstract\")": 2,
+      "Other(\"this\")": 6,
+      "Other(\"argument_list\")": 41,
+      "Other(\"boolean_type\")": 2,
+      "Other(\"floating_point_type\")": 6,
+      "Other(\"assignment_expression\")": 6,
+      "ReturnStatement": 4,
+      "Other(\"marker_annotation\")": 7,
+      "IfStatement": 1,
+      "Program": 1,
+      "Other(\"instanceof_expression\")": 2,
+      "MemberExpression": 18,
+      "Other(\"object_creation_expression\")": 4,
+      "Other(\"type_identifier\")": 41,
+      "Other(\"integral_type\")": 7,
+      "Other(\"protected\")": 2,
+      "Other(\"class\")": 5,
+      "Other(\"scoped_identifier\")": 8,
+      "Other(\"formal_parameter\")": 22,
+      "Other(\"static\")": 3,
+      "Other(\"unary_expression\")": 1,
+      "Other(\"super\")": 3,
+      "Identifier": 203,
+      "Other(\"formal_parameters\")": 26,
+      "Other(\"super_interfaces\")": 3,
+      "Other(\"decimal_integer_literal\")": 3,
+      "Other(\"field_declaration\")": 6,
+      "Other(\"cast_expression\")": 1,
+      "Other(\"variable_declarator\")": 7,
+      "Other(\"package_declaration\")": 1,
+      "Other(\"expression_statement\")": 25,
+      "Other(\"parenthesized_expression\")": 2,
+      "Other(\"true\")": 1,
+      "Other(\"public\")": 25,
+      "CallExpression": 34,
+      "Other(\"superclass\")": 3,
+      "Other(\"interface_body\")": 3,
+      "Other(\"type_parameter\")": 2,
+      "Other(\"string_literal\")": 20,
+      "Other(\"type_arguments\")": 8,
+      "Other(\"method_reference\")": 2,
+      "Other(\"class_body\")": 5,
+      "Other(\"type_list\")": 3,
+      "Other(\"explicit_constructor_invocation\")": 3,
+      "Other(\"type_parameters\")": 2,
+      "Other(\"decimal_floating_point_literal\")": 3,
+      "Annotation": 35,
+      "ClassDeclaration": 5,
+      "Other(\"private\")": 5,
+      "Other(\"throw_statement\")": 1,
+      "InterfaceDeclaration": 3,
+      "ImportDeclaration": 3,
+      "Other(\"binary_expression\")": 18,
+      "Other(\"lambda_expression\")": 6,
+      "Other(\"void_type\")": 17
+    }
+  },
+  "entities": [
+    {
+      "name": "Animal",
+      "entity_type": "Class",
+      "location_summary": "11:0-33:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Animal",
+      "entity_type": "Method",
+      "location_summary": "15:4-18:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "AnimalUtils",
+      "entity_type": "Class",
+      "location_summary": "143:0-168:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "AnimalUtils",
+      "entity_type": "Method",
+      "location_summary": "144:4-146:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Bird",
+      "entity_type": "Class",
+      "location_summary": "55:0-83:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Bird",
+      "entity_type": "Method",
+      "location_summary": "59:4-63:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Duck",
+      "entity_type": "Class",
+      "location_summary": "85:0-113:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Duck",
+      "entity_type": "Method",
+      "location_summary": "88:4-91:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Eagle",
+      "entity_type": "Class",
+      "location_summary": "115:0-140:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Eagle",
+      "entity_type": "Method",
+      "location_summary": "118:4-121:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Flyable",
+      "entity_type": "Interface",
+      "location_summary": "35:0-40:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "FunctionalInterface",
+      "entity_type": "Interface",
+      "location_summary": "50:0-53:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "List",
+      "entity_type": "Variable",
+      "location_summary": "155:8-155:49",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Optional",
+      "entity_type": "Method",
+      "location_summary": "134:4-139:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Override",
+      "entity_type": "Method",
+      "location_summary": "65:4-68:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Override",
+      "entity_type": "Method",
+      "location_summary": "70:4-73:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Override",
+      "entity_type": "Method",
+      "location_summary": "93:4-96:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Override",
+      "entity_type": "Method",
+      "location_summary": "98:4-104:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Override",
+      "entity_type": "Method",
+      "location_summary": "123:4-126:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Override",
+      "entity_type": "Method",
+      "location_summary": "128:4-131:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "String",
+      "entity_type": "Method",
+      "location_summary": "26:4-28:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "Swimmable",
+      "entity_type": "Interface",
+      "location_summary": "42:0-48:1",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "T",
+      "entity_type": "Method",
+      "location_summary": "80:4-82:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "T",
+      "entity_type": "Method",
+      "location_summary": "148:4-152:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "demonstratePolymorphism",
+      "entity_type": "Method",
+      "location_summary": "154:4-167:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "diveDeep",
+      "entity_type": "Method",
+      "location_summary": "45:4-47:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "eat",
+      "entity_type": "Method",
+      "location_summary": "22:4-24:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "feedFlock",
+      "entity_type": "Method",
+      "location_summary": "107:4-112:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "fly",
+      "entity_type": "Method",
+      "location_summary": "36:4-36:15",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "getAge",
+      "entity_type": "Method",
+      "location_summary": "30:4-32:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "hunt",
+      "entity_type": "Method",
+      "location_summary": "52:4-52:27",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "land",
+      "entity_type": "Method",
+      "location_summary": "37:4-39:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "makeSound",
+      "entity_type": "Method",
+      "location_summary": "20:4-20:37",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "migrate",
+      "entity_type": "Method",
+      "location_summary": "75:4-77:5",
+      "has_visibility": false,
+      "modifiers_count": 0
+    },
+    {
+      "name": "swim",
+      "entity_type": "Method",
+      "location_summary": "43:4-43:16",
+      "has_visibility": false,
+      "modifiers_count": 0
+    }
+  ],
+  "relations": [
+    {
+      "from_entity": "Bird",
+      "to_entity": "Animal",
+      "relation_type": "Inheritance",
+      "location_summary": "55:0-83:1"
+    },
+    {
+      "from_entity": "Duck",
+      "to_entity": "Bird",
+      "relation_type": "Inheritance",
+      "location_summary": "85:0-113:1"
+    },
+    {
+      "from_entity": "Eagle",
+      "to_entity": "Bird",
+      "relation_type": "Inheritance",
+      "location_summary": "115:0-140:1"
+    },
+    {
+      "from_entity": "current_module",
+      "to_entity": "java",
+      "relation_type": "ImportModule",
+      "location_summary": "3:0-3:22"
+    },
+    {
+      "from_entity": "current_module",
+      "to_entity": "java",
+      "relation_type": "ImportModule",
+      "location_summary": "4:0-4:27"
+    },
+    {
+      "from_entity": "current_module",
+      "to_entity": "java",
+      "relation_type": "ImportModule",
+      "location_summary": "5:0-5:26"
+    }
+  ],
+  "metrics": {
+    "total_lines": 168,
+    "classes_count": 5,
+    "functions_count": 0,
+    "complexity_score": 42.35,
+    "language_specific_keys": [
+      "annotations_count",
+      "interfaces_count"
+    ]
+  }
+}
