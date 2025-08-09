@@ -120,7 +120,6 @@ Personas
 - Límite de profundidad de query; sanitización de inputs
 - Validación de configuración (schema + runtime)
 
-
 5.8 Features y Casos de Uso (Modelado, Relaciones de Conjunto y Calidad)
 
 - Nodos:
@@ -367,7 +366,7 @@ Resumen: Es viable implementar en Rust la extracción del grafo de clases/artefa
 
 15.1 Pipeline de extracción
 - File → AST (Tree-sitter) → AST simplificado → Indexación (símbolos, scopes) → Resolución (nombres, tipos básica) → Relaciones (calls/imports/extends/implements/references/defines) → Call/Class Graph → Detección de Connascence → Pesos/Métricas → Persistencia (CAS/Merkle + FalkorDB)
-- Incremental: diffs de AST y alcance de impacto para recalcular solo nodos/relaciones afectadas.
+- Incremental: reuso de subárboles AST y reconstrucción de relaciones locales; actualización de agregados por delta.
 
 15.2 Grafo de clases y relaciones
 - Clases/Interfaces/Módulos/Funciones/Variables extraídos del AST con ubicación y metadatos.
@@ -393,7 +392,7 @@ Resumen: Es viable implementar en Rust la extracción del grafo de clases/artefa
 - Modelo n-ario: ConnascenceGroup como hub con edges AffectedBy a cada artefacto involucrado.
 - Fuerza/impacto: calcular score ∈ [0,1] por tipo con umbrales configurables y evidencia (tests/docs/annotations).
 
-15.3.1 Adquisición de connascence de runtime (Execution/Timing)
+15.3.1 Adquisición de connascence de runtime (Execution/Timing) — Future Roadmap (flag)
 - Objetivo: Capturar co-ejecuciones y dependencias temporales entre artefactos para inferir connascence de Execution y Timing.
 - Estrategia por lenguaje:
   - Python: sys.setprofile / sys.settrace, pytest plugin, cobertura (coverage.py) y mapping a funciones; opcional eventos de asyncio.
@@ -518,7 +517,7 @@ Objetivo: Enriquecer cada entidad y relación del grafo con contexto útil para 
 
 16.7 Criterios de aceptación (AI Context MVP)
 - Para nodos Code/Feature/UseCase: summary/intent/evidence/confidence disponibles vía API.
-- Context search híbrida devuelve >=90% de resultados relevantes en golden set interno.
+- Context search híbrida devuelve ≥90% de resultados relevantes en golden set interno.
 - Ranking configurable por pesos α..ε; soporte de expansión por 1-2 hops con límites.
 - Redacción básica de secretos/PII activa por defecto.
 - Embeddings y vector store opcionales; si deshabilitados, desempeño aceptable con BM25+grafo.

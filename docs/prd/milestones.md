@@ -1,57 +1,54 @@
-# Milestones y Cronograma (MVP ~12 semanas)
+# Milestones y Cronograma (MVP orientado a valor ~12 semanas)
 
 Nota: Fechas tentativas; ajustar según disponibilidad del equipo.
 
-- H1 — Grafo básico consultable (fin semana 5)
+- H1 — Grafo mínimo y consultas (fin semana 3)
   - Alcance:
-    - Parsers + AST simplificado para 4 lenguajes
-    - Graph builder y carga en FalkorDB
-    - Consultas básicas vía CLI/API
+    - Parsers + AST simplificado para Python y JavaScript/TypeScript
+    - Relaciones básicas: Calls, Imports, Extends, Implements
+    - Graph builder y carga en FalkorDB; CLI analyze + API /query básica
   - Criterios de aceptación:
-    - Consultas de calls/imports/herencias funcionando
-    - Índices iniciales aplicados; P50 < 100ms en dataset de prueba
+    - Consultas de llamadas/imports/herencias funcionando
+    - P50 < 150ms en dataset de prueba
 
-- H2 — Incremental + Versiones (fin semana 7)
+- H2 — JVM + Versioning + Watcher (fin semana 5)
   - Alcance:
-    - File watcher con debounce/batch/ignore
-    - Actualización incremental del grafo
-    - CAS + Merkle integrados; listar/compare versiones
+    - Añadir Java y Kotlin
+    - File watcher con debounce/batch/ignore y actualización incremental
+    - Versionado básico con CAS + Merkle; listar/compare versiones
   - Criterios de aceptación:
-    - Re-indexación < 0.5s por cambio
-    - Compare entrega delta de calidad y entidades
+    - Re-indexación < 0.5s por cambio (archivo)
+    - Compare entrega delta de entidades entre versiones
 
-- H3 — Calidad + Connascence (fin semana 9)
+- H3 — AASE YAML + TracesTo + LLM Context (fin semana 7)
   - Alcance:
-    - Métricas de cohesión/coupling/complexidad
-    - Detectores de connascence (estática + ejecución)
+    - Ingesta manual de AASE (YAML) para UseCase/Feature/Specification
+    - Trazabilidad TracesTo (Code -> Feature/UseCase)
+    - Endpoint optimizado para IA: POST /api/v1/query/llm-context
+  - Criterios de aceptación:
+    - Contexto LLM compacto y priorizado por relevancia; P50 ≤ 300ms
+    - Validado en 2-3 escenarios LLM (flujo pago, duplicidad, impacto de eliminación)
+
+- H4 — Calidad inicial + Connascence (Name/Type) (fin semana 9)
+  - Alcance:
+    - Métricas iniciales de cohesión/coupling/fan-in/out
+    - Detectores de connascence: Name y Type
     - Endpoint de overview de calidad
   - Criterios de aceptación:
-    - Reporte con hotspots y conteo por tipo de connascence
+    - Reporte con hotspots y conteo por tipo (Name/Type)
 
-- H3.5 — AI Context MVP (fin semana 10)
+- H5 — Relaciones avanzadas y AI Context MVP (fin semana 10-11)
   - Alcance:
-    - Facetas de contexto: summary, intent, evidence/provenance, confidence, tags
-    - Búsqueda híbrida (lexical+grafo; embeddings opcional) y ranking configurable
+    - Relaciones: Uses, MemberOf, Realizes, OwnedBy, BoundedContext
     - Endpoints: /context/{id}, /context/search, /context/rank, /context/expand
-    - Redacción básica de PII/secrets y auditoría de procedencia
+    - Redacción de PII/secrets y provenance
   - Criterios de aceptación:
-    - Contexto disponible para Code/Feature/UseCase vía API
     - ≥90% relevancia en golden set interno para context search
-    - Expansión de vecindario (1–2 hops) y ranking con pesos α..ε
-    - Redacción por defecto activa
+    - Expansión de vecindario (1–2 hops) y ranking con pesos
 
-- H4 — AASE + APIs completas (fin semana 11)
+- H6 — Endurecimiento (fin semana 12)
   - Alcance:
-    - Artefactos AASE listar/obtener/generar
-    - API REST estable + WebSocket + rate limiting/CORS
-    - CLI madura (query/version/watch)
-  - Criterios de aceptación:
-    - Flujos E2E documentados, P50 < 50ms en consultas típicas
-
-- H5 — Endurecimiento (fin semana 12)
-  - Alcance:
-    - Tests integrales/property-based
-    - Observabilidad y GC/retención
-    - Documentación y ejemplo E2E
+    - Tests integrales/property-based, observabilidad y retención
+    - Documentación E2E y ejemplo
   - Criterios de aceptación:
     - Build release estable, checklist de contribución cumplido

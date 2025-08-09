@@ -145,6 +145,87 @@ Retrieve detailed information about a specific node.
 }
 ```
 
+### LLM-Optimized Context API
+
+These endpoints deliver compact, ranked context tailored for LLM consumption. They apply the stable context schema and respect token budgets.
+
+#### POST /api/v1/query/llm-context
+
+Produce a prioritized context payload for a given focus (UseCase, Feature, Node, or Diff).
+
+Request Body:
+```json
+{
+  "focus": { "type": "UseCase", "id": "UCS-payment-flow" },
+  "version": "latest",
+  "token_budget": 12000,
+  "max_hops": 2,
+  "top_k": 50,
+  "include_facets": ["summary", "quality", "connascence"],
+  "ranking": { "weights": { "topology": 0.5, "text": 0.5 }, "strategy": "hybrid" },
+  "filters": { "languages": ["python", "javascript"], "exclude_tests": true }
+}
+```
+
+Response:
+```json
+{
+  "version_id": "v_xxx",
+  "focus": { "type": "UseCase", "id": "UCS-payment-flow" },
+  "primary": [
+    { "id": "func_process_payment", "type": "Function", "summary": "Valida y procesa pagos.", "snippet_ref": "cas://src/services/payment.py#L40-92" }
+  ],
+  "relations": [
+    { "from": "func_api_payments_post", "to": "func_process_payment", "type": "calls", "evidence": {"file": "src/api/payments.py", "line": 23} }
+  ],
+  "quality": { "cohesion": 0.78, "coupling": {"afferent": 3, "efferent": 5} },
+  "connascence": { "Name": 3, "Type": 2 },
+  "narrative": "El flujo de pago es iniciado por el endpoint y desemboca en la capa de gateway.",
+  "limits": { "token_budget": 12000, "truncation": "tail" }
+}
+```
+
+Notes:
+- This endpoint maps UseCase/Feature bundles into a compact schema for LLMs.
+- Large artifacts are referenced by CAS URIs; clients fetch on demand if needed.
+
+#### POST /api/v1/query/explain-change
+
+Explain the impact of a code change (diff/commit or version pair). Returns the affected subgraph plus a concise narrative.
+
+Request Body:
+```json
+{
+  "diff": "--- a/src/payment.py\n+++ b/src/payment.py\n@@ ...",
+  "from_version": "v_abc123",
+  "to_version": "v_def456",
+  "scope_filters": { "paths": ["src/services/", "src/api/"] },
+  "include_tests": true
+}
+```
+
+Response:
+```json
+{
+  "summary": {
+    "changed_files": 3,
+    "affected_entities": 7,
+    "risk": "medium",
+    "reasons": ["fan-out increment", "touches payment gateway"]
+  },
+  "subgraph": {
+    "primary": [
+      { "id": "func_process_payment", "type": "Function", "change": "modified" }
+    ],
+    "relations": [
+      { "from": "func_validate_card", "to": "func_process_payment", "type": "calls", "change": "unchanged" }
+    ]
+  },
+  "narrative": "El cambio modifica la validación previa a process_payment, potencialmente afectando el orden de llamadas.",
+  "tests_impacted": ["test_payment_happy_path", "test_declined_card"]
+}
+```
+
 ### Version Management API
 
 #### GET /api/v1/versions
