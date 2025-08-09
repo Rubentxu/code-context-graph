@@ -38,6 +38,11 @@ Query the semantic graph with natural language or structured queries.
 }
 ```
 
+Event types:
+- `NODE_UPSERT`, `EDGE_UPSERT`, `NODE_DELETE`, `EDGE_DELETE` — grafo mutado (incluye version_id)
+- `AGGREGATE_UPDATE` — cambios en agregados (connascence/cohesión/coupling) por versión
+- `file_changed` — evento de watcher de archivos
+
 **Response:**
 ```json
 {
@@ -396,6 +401,166 @@ Generate new context artifacts.
   "base_entities": ["class_payment_service", "func_process_payment"]
 }
 ```
+
+### UseCase Context Bundle API
+
+#### GET /api/v1/context/use-cases/{id}/bundle
+
+Return a comprehensive, versioned context bundle for a UseCase.
+
+Query Parameters:
+- `depth` (int, optional): relation expansion depth (default 1)
+- `include` (csv, optional): features,artifacts,relations,connascence,quality,prompts,evidence
+- `version` (string, optional): version_id or "latest"
+
+Response:
+```json
+{
+  "use_case": {
+    "id": "UCS-payment-refund",
+    "summary": "Refund flow for card payments",
+    "intent": "Allow users to request refunds within 30 days",
+    "acceptance_criteria": ["..."],
+    "bounded_context": "payments",
+    "owners": ["payments@team"],
+    "kpis": ["refund_sla_ms", "error_rate"]
+  },
+  "features": [
+    { "id": "FTR-refund-api", "summary": "Refund API endpoint", "status": "active" }
+  ],
+  "artifacts": [
+    {
+      "id": "func_process_refund",
+      "type": "Function",
+      "signature": "process_refund(order_id: str) -> RefundResult",
+      "file_path": "src/payments/refund.py",
+      "fan_in": 3,
+      "fan_out": 2
+    }
+  ],
+  "relations": [ { "from": "func_a", "to": "func_b", "type": "calls" } ],
+  "connascence": {
+    "by_type": {
+      "Name": 4,
+      "Type": 2,
+      "Execution": 1
+    },
+    "groups": [
+      { "id": "cg_exec_1", "type": "Execution", "members": ["func_validate", "func_process_refund"], "strength": 0.82 }
+    ]
+  },
+  "quality": {
+    "cohesion": 0.78,
+    "coupling": {
+      "efferent": 5,
+      "afferent": 7
+    }
+  },
+  "prompts": {
+    "explain": "Explain how the refund flow works for {use_case}",
+    "refactor": "Propose refactors to reduce coupling in {feature}"
+  },
+  "evidence": {
+    "commits": ["abc123"],
+    "tests": ["tests/test_refund_flow.py::test_happy_path"],
+    "docs": ["docs/refund.md"]
+  },
+  "version_info": { "version_id": "v_def456" }
+}
+```
+
+### Runtime Trace Ingestion API
+
+#### POST /api/v1/runtime/traces
+
+Ingest batched runtime trace events for dynamic connascence derivation.
+
+Headers:
+- `Content-Type: application/x-ndjson` or `application/octet-stream` (Protobuf)
+
+Query Parameters:
+- `commit`, `version_id`, `test_id`, `run_id`, `env`
+
+NDJSON Event (per line):
+```json
+{ "ts": 1723190400123, "thread_id": 1, "span_id": "s1", "file": "src/payments/refund.py", "qualified_name": "payments.refund.process_refund", "event": "enter" }
+```
+
+Response:
+```json
+{ "accepted": 10000, "dropped": 0, "version_id": "v_def456" }
+```
+
+### Connascence Aggregate API
+
+#### GET /api/v1/quality/connascence/aggregate
+
+Aggregate connascence metrics by scope.
+
+Query Parameters:
+- `scope`: Feature|UseCase|Module|Repo
+- `id`: scope identifier (path for Module)
+- `version`: version_id or "latest"
+
+Response:
+```json
+{
+  "scope": { "type": "UseCase", "id": "UCS-payment-refund" },
+  "totals": { "Name": 4, "Type": 2, "Execution": 1 },
+  "strength": { "Name": 0.31, "Type": 0.22, "Execution": 0.82 },
+  "top_groups": [ { "id": "cg_exec_1", "type": "Execution", "strength": 0.82 } ],
+  "version_id": "v_def456"
+}
+```
+
+### Domain and Context Mutation API
+
+#### POST /api/v1/domain/{entity}
+Create domain entity (Feature|UseCase|Requirement|Team|BoundedContext).
+
+#### PATCH /api/v1/domain/{entity}/{id}
+Update domain entity.
+
+#### DELETE /api/v1/domain/{entity}/{id}
+Delete domain entity.
+
+#### POST /api/v1/context/metadata/{node_id}
+Upsert context metadata (summaries, intent, tags, evidence). Requires provenance in payload.
+
+#### POST /api/v1/context/prompts/{task}
+Create/update prompt templates for tasks.
+
+### LLM Enrichment API
+
+#### POST /api/v1/enrich/{scope}
+Queue an enrichment job using an LLM provider. `scope` ∈ Node|Edge|Feature|UseCase|Bundle.
+
+Request Body:
+```json
+{
+  "ids": ["func_process_refund"],
+  "fields": ["summary", "intent", "connascence_rationale"],
+  "strategy": "extractive",
+  "provider": "openai:gpt-4o-mini"
+}
+```
+
+Response:
+```json
+{ "job_id": "enrich_abc123" }
+```
+
+#### GET /api/v1/enrich/jobs/{job_id}
+Get job status and results.
+
+#### GET /api/v1/review/queue
+List pending items for human review (when enabled).
+
+#### POST /api/v1/review/{item_id}/approve
+Approve an enrichment suggestion.
+
+#### POST /api/v1/review/{item_id}/reject
+Reject an enrichment suggestion.
 
 ### Real-time Updates API
 
