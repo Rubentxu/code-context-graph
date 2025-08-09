@@ -393,6 +393,31 @@ Resumen: Es viable implementar en Rust la extracción del grafo de clases/artefa
 - Modelo n-ario: ConnascenceGroup como hub con edges AffectedBy a cada artefacto involucrado.
 - Fuerza/impacto: calcular score ∈ [0,1] por tipo con umbrales configurables y evidencia (tests/docs/annotations).
 
+15.3.1 Adquisición de connascence de runtime (Execution/Timing)
+- Objetivo: Capturar co-ejecuciones y dependencias temporales entre artefactos para inferir connascence de Execution y Timing.
+- Estrategia por lenguaje:
+  - Python: sys.setprofile / sys.settrace, pytest plugin, cobertura (coverage.py) y mapping a funciones; opcional eventos de asyncio.
+  - Node.js/TS: V8 Inspector Protocol (Tracing/Profiler), hooks async, Istanbul cobertura; map a símbolos via sourcemaps (TS).
+  - Java/Kotlin (JVM): Java Agent con ByteBuddy/ASM para instrumentar entry/exit; opcional JFR/JVM TI; integración JUnit.
+  - Rust: tracing crate (instrument), cargo-llvm-cov para cobertura; macros #[instrument] en funciones objetivo.
+- Datos capturados (evento): {ts, thread_id, span_id, file, symbol, qualified_name, event=enter|exit, args_hash?, alloc_id?}
+  - Opcional: lectura/escritura de estado (shared var id), tamaño de payload, latencia.
+- Ingesta:
+  - POST /api/v1/runtime/traces — batch NDJSON/Protobuf con metadatos {commit, version_id, test_id, run_id, env}.
+  - Normalización y correlación a nodos del grafo por (qualified_name, file, line_range) y tablas de símbolos por versión.
+- Derivación:
+  - Co-ejecución: pares de símbolos en la misma traza/test con frecuencia > τ → ConnascenceGroup(type=Execution).
+  - Timing: secuencias con dependencia temporal estable (A precede B con p>τ) → ConnascenceGroup(type=Timing).
+  - Peso/fuerza: función de frecuencia relativa, cobertura, latencia media y estabilidad entre runs.
+- Agregación y materialización:
+  - Agregar por Feature/UseCase/Module por versión; persistir snapshots para consultas rápidas.
+  - Marcar confidence según cobertura de tests y consistencia entre runs.
+- Controles de performance/privacidad:
+  - Sampling de spans, límites por paquete/proyecto, exclusiones por path.
+  - Redacción de datos sensibles en args; no persistir payloads.
+- Reproducibilidad:
+  - Registrar {commit, test_id, seed, env} para repetir runs; cachear correlaciones por version_id.
+
 15.4 Estrategia por lenguaje (resolución y límites)
 - Python: dinámica; buena cobertura con Tree-sitter + heurísticas de import/module y nombres calificados; tipos opcionales (type hints) si existen.
 - JavaScript/TypeScript: para TS, usar tipo básico mediante lectura de declaraciones; para JS, heurísticas de módulo (ESM/CommonJS) y patrones; opcional integración tsserver para mejora futura.
@@ -531,3 +556,47 @@ Objetivo: Enriquecer cada entidad y relación del grafo con contexto útil para 
 - Criterios:
   - Tiempos objetivo: detección→reflejo en grafo < 1s por archivo; bundle actualizado bajo la misma versión.
   - Operaciones de mutación con retry/idempotencia y validaciones (referential integrity, policy checks).
+
+---
+
+## 17. Enriquecimiento asistido por LLM (adaptadores)
+
+Motivación: Ciertas piezas de contexto y calidad (p.ej., matices de Meaning/Algorithm en connascence, intent detallado, invariants implícitas, resúmenes de alto nivel) no siempre se pueden extraer de forma fiable solo con análisis estático en Rust. Proponemos un mecanismo opcional y acotado para delegar a un LLM la generación/complemento de estos datos, con controles de seguridad, coste y trazabilidad.
+
+17.1 Alcance del LLM
+- Generar/actualizar: summary, intent/purpose, invariants/contratos propuestos, ejemplos/snippets explicativos.
+- Enriquecer connascence: rationale/explicación y clasificación fina donde falte señal; nunca sustituir evidencia objetiva.
+- Sugerencias de refactor/responsibility hints para alta coupling/baja cohesión (marcadas como hints).
+
+17.2 Principios y reconciliación
+- Programmatic-first: los datos extraídos determinísticamente (alta confianza) prevalecen; el LLM solo rellena huecos o añade anotaciones con menor prioridad.
+- Confianza y procedencia: todo output del LLM se persiste con provenance {method: "llm", provider, model, prompt_hash, created_at} y confidence distribuida aparte.
+- Reconciliación: reglas por campo (e.g., no sobreescribir summaries humanos aprobados; combinar invariants como conjunto; rationale solo anexa).
+- Human-in-the-loop opcional: cola de revisión para aprobar/rechazar anotaciones sensibles.
+
+17.3 Arquitectura de adaptadores
+- Abstracción Provider: OpenAI, Anthropic, Azure, Llama.cpp/Local. Config por feature flag.
+- Orquestación: jobs asincrónicos en cola (batch) disparados por:
+  - cambios detectados (delta) y thresholds (p.ej., archivo > N líneas cambiadas);
+  - solicitud explícita (API) o curación manual.
+- Contexto: se construye un paquete mínimo (código/snippets, firmas, relaciones cercanas, tests, docs) con límites de tokens; referencias largas se guardan en CAS y se adjuntan como URLs.
+- Caching: clave por (prompt_template_id, context_hash, model) con TTL; guardar en CAS para reuso.
+- Coste y cuotas: budgets por día/proyecto y métricas; rechazar/posponer si se excede.
+
+17.4 Seguridad y cumplimiento
+- Redacción previa y posterior (PII/secrets) en el contexto y en las respuestas.
+- Políticas por licencia/privacidad: evitar envío de fragmentos con restricciones; lista de exclusiones (paths, repos).
+- Telemetría y auditoría: log estructurado de prompts y decisiones (con hashes, no contenido sensible).
+
+17.5 APIs
+- POST /api/v1/enrich/{scope} — scope ∈ Node|Edge|Feature|UseCase|Bundle; body con ids, campos objetivo y estrategia (extractive|abstractive|hints). Devuelve job_id.
+- GET /api/v1/enrich/jobs/{job_id} — estado/resultados parciales.
+- GET /api/v1/review/queue — ítems pendientes de aprobación (si HI-LO activado).
+- POST /api/v1/review/{item_id}/approve|reject — aplicar/descartar anotaciones.
+
+17.6 Criterios de aceptación
+- Feature flag para activar LLM por ámbito (global/proyecto) y por tipo de campo.
+- Provenance obligatorio y cache efectivo (hit-rate ≥ 60% en re-ejecuciones de CI sobre el mismo commit).
+- Cost guard-rails: hard budget diario y backoff exponencial respetados.
+- Reconciliación estable: no se sobreescriben campos deterministas ni aprobados manualmente; conflictos se marcan para revisión.
+- Seguridad: redacción aplicada y ausencia de filtraciones en pruebas; auditoría disponible.
