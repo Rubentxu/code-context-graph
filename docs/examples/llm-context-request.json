@@ -1,0 +1,10 @@
+{
+  "focus": { "type": "UseCase", "id": "UCS-payment-flow" },
+  "version": "latest",
+  "token_budget": 12000,
+  "max_hops": 2,
+  "top_k": 50,
+  "include_facets": ["summary", "quality", "connascence"],
+  "ranking": { "weights": { "topology": 0.5, "text": 0.5 }, "strategy": "hybrid" },
+  "filters": { "languages": ["python", "javascript"], "exclude_tests": true }
+}

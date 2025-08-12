@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  rust-tests:
+    name: Rust Unit & Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: true
+
+      - name: Run tests (default)
+        run: cargo test --all --tests -- --nocapture
+
+  falkor-testcontainers:
+    name: FalkorDB integration (testcontainers)
+    runs-on: ubuntu-latest
+    needs: rust-tests
+    env:
+      ENABLE_DOCKER_TESTS: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: true
+
+      - name: Ensure Docker is available
+        run: docker ps
+
+      - name: Run Falkor testcontainers integration test
+        run: |
+          cargo test -p code-context-graph-graph --test falkor_testcontainers -- --ignored --nocapture
+
+  falkor-live:
+    name: FalkorDB live integration (FALKORDB_URL)
+    runs-on: ubuntu-latest
+    needs: rust-tests
+    if: ${{ secrets.FALKORDB_URL != '' }}
+    env:
+      FALKORDB_URL: ${{ secrets.FALKORDB_URL }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo cache
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: true
+
+      - name: Show target server
+        run: echo "Using FALKORDB_URL=$FALKORDB_URL"
+
+      - name: Run live integration test against FalkorDB
+        run: |
+          cargo test -p code-context-graph-graph --test integration_falkor -- --ignored --nocapture

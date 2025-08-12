@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  falkordb:
+    # Imagen oficial de FalkorDB
+    image: falkordb/falkordb:latest
+    container_name: falkordb
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "127.0.0.1", "PING"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redisinsight:
+    # Dashboard para Redis. Puede gestionar la instancia FalkorDB (Redis-compatible)
+    image: redis/redisinsight:latest
+    container_name: redisinsight
+    restart: unless-stopped
+    depends_on:
+      falkordb:
+        condition: service_healthy
+    ports:
+      - "5540:5540"  # UI en http://localhost:5540
+    environment:
+      - RIPROXY_ENABLE=false
+    volumes:
+      - redisinsight-data:/data
+
+volumes:
+  redisinsight-data:

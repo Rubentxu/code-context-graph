@@ -44,6 +44,51 @@ cargo build --release
 ./target/release/ccg serve --port 8080
 ```
 
+## 🧩 Visualization
+
+Generate Mermaid-based class diagrams from your codebase (file or full project directory). See full guide in [docs/viz.md](./docs/viz.md).
+
+Quick examples:
+
+```bash
+# Project-wide class diagram (Markdown/mermaid)
+./target/release/ccg viz class --path examples/java --out /tmp/java_project.md --format md
+
+# Project-wide HTML (render-ready with Mermaid.js)
+./target/release/ccg viz class --path examples/python --out /tmp/python_project.html --format html
+
+# Filter by class names
+./target/release/ccg viz class --path . --out /tmp/filtered.md --filter-class User,UserService
+```
+
+## 🐳 FalkorDB + Dashboard (Docker Compose)
+
+Arranca un entorno local con FalkorDB y RedisInsight (dashboard) usando Docker Compose:
+
+```bash
+# Levantar servicios (FalkorDB en 6379, RedisInsight UI en 5540)
+make docker-up
+
+# Ver logs
+make docker-logs
+
+# Parar servicios
+make docker-down
+```
+
+Accede a RedisInsight en http://localhost:5540 y añade la base de datos:
+- Host: 127.0.0.1
+- Port: 6379
+- Name: falkordb
+
+Configura tu app/tests para apuntar a esta instancia:
+
+```bash
+export FALKORDB_URL=redis://127.0.0.1:6379
+```
+
+Si ya tienes un Redis local en 6379, modifica el mapeo de puertos en `docker/docker-compose.yml` (por ejemplo, `"6380:6379"`) y ajusta `FALKORDB_URL`.
+
 ## 📁 Project Structure
 
 ```

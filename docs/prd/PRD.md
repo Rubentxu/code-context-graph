@@ -41,7 +41,7 @@ Incluido
 - Parsing multilenguaje con Tree-sitter e incremental
 - Construcción/consulta de grafo en FalkorDB
 - CAS + Merkle para contenido y versiones
-- Detección de connascence (estática y dinámica opcional)
+- Detección de connascence (estática y dinámica con adaptadores para provision de informacion de este tipo con LLMs)
 - Artefactos AASE (context, model, use_case, prompt, specification)
 - API REST, WebSocket para actualizaciones, CLI
 
@@ -52,17 +52,31 @@ Excluido (fase 1)
 
 ---
 
-## 4. Stakeholders y Usuarios
+## 4. Stakeholders y Perfiles de Usuario (Personas)
 
-- Devs backend (Rust) — propietarios técnicos
-- Devs producto/QA — consumidores de métricas y consultas
-- LLM agents — consumidores de contexto y grafo
-- Ops — despliegue/monitorización
+### 4.1. Stakeholders Clave
 
-Personas
-- Dev que necesita navegar impacto de cambios
-- Arquitecto que analiza acoplamientos, hotspots
-- Agente LLM que responde preguntas del repositorio
+-   **Equipo de Desarrollo (Propietarios Técnicos)**: Principalmente los desarrolladores de Rust que construyen y mantienen el motor `Code Context Graph`. Su enfoque está en la robustez, rendimiento, extensibilidad y calidad del propio sistema.
+-   **Equipos de Producto y Calidad (Consumidores de Métricas)**: Ingenieros de software, arquitectos y personal de QA que consumen las métricas de calidad (connascence, acoplamiento, cohesión) y las capacidades de consulta del grafo para evaluar la salud del código, planificar refactors y asegurar la calidad del producto final.
+-   **Ingenieros de Plataforma / DevOps (Operadores)**: Responsables del despliegue, la monitorización, la escalabilidad y la fiabilidad del servicio en producción. Utilizan los logs estructurados, las métricas de Prometheus y los health checks.
+-   **Agentes de IA y Sistemas Autónomos (Consumidores de Contexto)**: Sistemas basados en LLM que utilizan el grafo como una base de conocimiento (Knowledge Base) para tareas de RAG (Retrieval-Augmented Generation), planificación y ejecución de herramientas sobre el código. Son los principales beneficiarios de la ingeniería de contexto (Sección 16).
+
+### 4.2. Perfiles de Usuario (Personas)
+
+-   **Elena, la Desarrolladora de Producto**:
+    -   **Rol**: Ingeniera de software que trabaja en un equipo de producto.
+    -   **Objetivo**: Entender el impacto de un cambio antes de implementarlo. Necesita saber qué partes del código se verán afectadas si modifica una función o una clase específica.
+    -   **Interacción**: Usa la API de consulta (`/api/v1/query`) o una herramienta visualizadora para explorar las relaciones `Calls`, `References` e `ImplementsFeature` y así navegar el grafo de dependencias.
+
+-   **David, el Arquitecto de Software**:
+    -   **Rol**: Arquitecto responsable de la salud estructural y la evolución del sistema.
+    -   **Objetivo**: Identificar "hotspots" de acoplamiento, módulos con baja cohesión y áreas con alta connascence para guiar las iniciativas de refactorización y modularización.
+    -   **Interacción**: Consulta los endpoints de calidad (`/api/v1/quality/overview`, `/api/v1/quality/relations`) y de dominio (`/api/v1/domain/relations/sets`) para analizar las métricas `CouplesTo`, `CohesionWith` y las relaciones entre `BoundedContext`.
+
+-   **"ContextBot", el Agente de IA Asistente**:
+    -   **Rol**: Un agente LLM integrado en el flujo de trabajo de desarrollo.
+    -   **Objetivo**: Responder preguntas complejas sobre el repositorio, generar documentación, sugerir refactors y proporcionar contexto enriquecido para nuevas tareas de desarrollo. Es el consumidor principal de la ingeniería de contexto.
+    -   **Interacción**: Utiliza intensivamente los endpoints de contexto (`/api/v1/context/search`, `/api/v1/context/use-cases/{id}/bundle`) para obtener paquetes de información curada que combinan señales semánticas y estructurales del grafo, tal como se describe en la sección 16.
 
 ---
 
@@ -73,24 +87,41 @@ Personas
 - Limitar tamaño/timeout por archivo (configurable)
 - Parsing incremental y por lotes
 
-5.2 Construcción de Grafo
-- Entidades: File, Module, Class, Interface, Function/Method, Variable, Type, Enum
-- Entidades extendidas: Feature, UseCase, QualityMetric, ContextArtifact
-- Relaciones: Contains, Imports, Extends, Implements, Calls, References, Returns, Parameter, Instantiates, Uses
-- Relaciones extendidas (negocio y calidad):
-  - TracesTo (Code -> Requirement/UseCase/Feature)
-  - MemberOf (Artifact -> Feature | Feature -> UseCase)
-  - ImplementsFeature (Code/Module -> Feature)
-  - Realizes (Feature -> UseCase) [alias de SupportsUseCase con semántica fuerte]
-  - DependsOn (Feature -> Feature)
-  - SupersetOf / SubsetOf / Overlaps / DisjointWith (entre conjuntos Feature/UseCase/Modules)
-  - PartOf / ComposedOf (agregación/descomposición)
-  - CohesionWith (intra-conjunto, con peso)
-  - CouplesTo (inter-conjunto, con peso y direccionalidad)
-  - Satisfies (Feature|Code -> Requirement)
-  - Verifies (TestCase -> Feature|UseCase)
-  - OwnedBy (Feature|UseCase -> Team)
-- Serialización para FalkorDB (MERGE; índices recomendados)
+### 5.2. Construcción de Grafo
+
+-   **Nodos de Código (Artefactos Base)**: `File`, `Module`, `Class`, `Interface`, `Function/Method`, `Variable`, `Type`, `Enum`.
+
+-   **Nodos de Dominio, Calidad y Patrones (Conceptos Abstractos)**:
+    -   **Dominio y Negocio**: `Feature`, `UseCase`, `Requirement`, `TestCase`, `Team`, `BoundedContext`.
+    -   **Calidad y Contexto**: `QualityMetric`, `ContextArtifact` (para resúmenes, intenciones, etc.).
+    -   **Patrones y Arquitectura**: `DesignPattern` (e.g., Factory, Singleton, Observer), `ArchitecturalPattern` (e.g., Hexagonal, MVC, Microservices).
+
+-   **Relaciones Estructurales (Direccionales)**: `Contains`, `Imports`, `Extends`, `Implements`, `Calls`, `References`, `Returns`, `Parameter`, `Instantiates`, `Uses`.
+    -   *Metadatos de enriquecimiento*: Estas aristas pueden llevar propiedades adicionales como `{ is_async: bool, is_polymorphic: bool, confidence: float, file_path: '...' }` para dar más contexto a los LLMs.
+
+-   **Relaciones Extendidas (Negocio y Calidad)**:
+    -   `TracesTo`, `MemberOf`, `ImplementsFeature`, `Realizes`, `DependsOn`, `SupersetOf`, `SubsetOf`, `Overlaps`, `DisjointWith`, `PartOf`, `ComposedOf`, `CohesionWith`, `CouplesTo`, `Satisfies`, `Verifies`, `OwnedBy`.
+
+-   **Relaciones de Patrones y Metadatos**:
+    -   `ImplementsPattern (CodeNode -> DesignPattern)`: Indica que un artefacto de código implementa un patrón de diseño, con propiedades como `{ role: 'FactoryMethod' | 'Product' }`.
+    -   `ConformsTo (Component -> ArchitecturalPattern)`: Muestra que un componente (como un `Module` o un `BoundedContext`) se adhiere a un patrón arquitectónico.
+    -   `HasMetadata (Node -> ContextArtifact)`: Vincula cualquier nodo a un artefacto de contexto que contiene metadatos explícitos (resúmenes, justificaciones, invariantes).
+    -   `AnnotatedWith (CodeNode -> Annotation)`: Representa anotaciones o decoradores del código fuente que actúan como metadatos estructurados.
+
+-   **Serialización**: Uso de `MERGE` en FalkorDB para la inserción/actualización idempotente de nodos y relaciones, con los índices recomendados.
+
+#### 5.2.1. Conceptos Derivados para Análisis de Dependencias
+
+Estos conceptos no se modelan como nuevos tipos de aristas, sino que se infieren consultando la direccionalidad de las relaciones existentes (`Calls`, `Imports`, `DependsOn`, `CouplesTo`, etc.).
+
+-   **Upstream (Proveedores / Dependencias)**: El conjunto de nodos de los que depende una entidad. Se descubre navegando las relaciones en dirección *contraria* (entrante). Por ejemplo, si `A` llama a `B`, `B` es *upstream* de `A`.
+-   **Downstream (Consumidores / Impacto)**: El conjunto de nodos que dependen de una entidad. Se descubre navegando las relaciones en su dirección *natural* (saliente). Si `A` llama a `B`, `A` es *downstream* de `B`.
+-   **Radio de Impacto (Blast Radius)**: Es el cierre transitivo de todas las relaciones *downstream*. Responde a la pregunta: "¿Qué se podría romper si cambio este componente?".
+-   **Cadena de Dependencia (Dependency Chain)**: La ruta completa de nodos *upstream* o *downstream* que conectan dos entidades, mostrando dependencias transitivas.
+-   **Nodos Fuente (Source) y Sumidero (Sink)**:
+    -   **Fuente**: Nodos sin dependencias *upstream* (sin aristas entrantes de dependencia). A menudo son puntos de entrada o configuración.
+    -   **Sumidero**: Nodos sin consumidores *downstream* (sin aristas salientes de dependencia). Suelen ser utilidades finales o puntos de salida del sistema.
+
 
 5.3 Connascence y Calidad
 - Tipos: Name, Type, Meaning, Position, Algorithm, Execution, Timing (exp), Values, Identity

@@ -1,24 +1,17 @@
 [package]
-name = "code-context-graph-graph"
+name = "code-context-graph-viz"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 license.workspace = true
 repository.workspace = true
-keywords.workspace = true
-categories.workspace = true
 
 [dependencies]
 code-context-graph-core = { path = "../core" }
 code-context-graph-parser = { path = "../parser" }
-redis = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
-thiserror = { workspace = true }
-tokio = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
 
 [dev-dependencies]
-testcontainers = "0.15"
+pretty_assertions = "1"
